@@ -21,11 +21,11 @@ class Prompt {
     return input == 'y' || input == 'yes';
   }
 
-  static String select(String title, List<String> options) {
+  static T select<T>(String title, List<T> options, String Function(T) label) {
     stdout.writeln(title);
 
     for (var i = 0; i < options.length; i++) {
-      stdout.writeln('${i + 1}. ${options[i]}');
+      stdout.writeln('${i + 1}. ${label(options[i])}');
     }
 
     while (true) {

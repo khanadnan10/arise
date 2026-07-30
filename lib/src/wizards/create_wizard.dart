@@ -19,12 +19,10 @@ class CreateWizard {
 
     final architecture = Prompt.select(
       'Select Architecture',
-      Architecture.values.map((e) => e.label).toList(),
-    );
-    final selectedArchitecture = Architecture.values.firstWhere(
-      (e) => e.label == architecture,
+      Architecture.values,
+      (architecture) => architecture.label,
     );
 
-    return CreateConfig(projectName: name, architecture: selectedArchitecture);
+    return CreateConfig(projectName: name, architecture: architecture);
   }
 }
