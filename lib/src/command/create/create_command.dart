@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:arise/src/constants/packages.dart';
 import 'package:arise/src/models/create_config.dart';
+import 'package:arise/src/services/package_service.dart';
 import '../../wizards/create_wizard.dart';
 
 class CreateCommand extends Command<int> {
@@ -49,7 +51,16 @@ class CreateCommand extends Command<int> {
     stdout.writeln('Architecture: ${config.architecture.label}');
     stdout.writeln('State Management: ${config.stateManagement.label}');
     stdout.writeln('Routing: ${config.routing.label}');
-    return _createFlutterProject(projectName);
+
+    await _createFlutterProject(projectName);
+
+    final packageService = PackageService();
+    await packageService.add(config.projectName, [
+      ...getStateManagementPackages(config.stateManagement.label),
+      ...getRoutingPackages(config.routing.label),
+    ]);
+
+    return 0;
   }
 
   Future<bool> _isFlutterInstalled() async {
