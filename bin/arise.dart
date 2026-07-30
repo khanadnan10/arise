@@ -1,5 +1,11 @@
-import 'package:arise/arise.dart' as arise;
+import 'dart:io';
 
-void main(List<String> arguments) {
-  print('Hello world: ${arise.calculate()}!');
+import 'package:arise/arise.dart';
+
+Future<void> main(List<String> arguments) async {
+  final exitCode = await AriseCommandRunner().run(arguments);
+
+  if (exitCode != null) {
+    exit(exitCode);
+  }
 }
