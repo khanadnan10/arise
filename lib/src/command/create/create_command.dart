@@ -48,6 +48,7 @@ class CreateCommand extends Command<int> {
     stdout.writeln('Creating Flutter project...');
     stdout.writeln('Architecture: ${config.architecture.label}');
     stdout.writeln('State Management: ${config.stateManagement.label}');
+    stdout.writeln('Routing: ${config.routing.label}');
     return _createFlutterProject(projectName);
   }
 
