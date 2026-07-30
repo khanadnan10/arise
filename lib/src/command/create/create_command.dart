@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import '../../utils/prompt.dart';
-import '../../models/create_config.dart';
+import 'package:arise/src/models/create_config.dart';
+import '../../wizards/create_wizard.dart';
 
 class CreateCommand extends Command<int> {
   CreateCommand() {
@@ -24,18 +24,14 @@ class CreateCommand extends Command<int> {
     stdout.writeln('> Welcome to Arise');
     stdout.writeln();
 
-    String? projectName;
+    CreateConfig config;
 
-    if (argResults?['skip'] == true) {
-      projectName = argResults?.rest.firstOrNull;
-    } else {
-      projectName = Prompt.ask('Project name');
-    }
+    config = await CreateWizard().run(
+      skip: argResults?['skip'] == true,
+      projectName: argResults?.rest.firstOrNull,
+    );
 
-    if (projectName == null || projectName.isEmpty) {
-      stderr.writeln('❌ Project name cannot be empty.');
-      return 1;
-    }
+    final projectName = config.projectName;
 
     if (_projectExists(projectName)) {
       stderr.writeln('❌ Project "$projectName" already exists.');
@@ -64,27 +60,7 @@ class CreateCommand extends Command<int> {
   }
 
   Future<int> _createFlutterProject(String projectName) async {
-    final shouldContinue = Prompt.confirm('Create project "$projectName"?');
-
-    if (!shouldContinue) {
-      stdout.writeln('Operation cancelled.');
-      return 0;
-    }
-    final config = CreateConfig(
-      projectName: projectName,
-      architecture: Prompt.select('Select Architecture', [
-        'None',
-        'Clean Architecture',
-        'MVC',
-        'MVVM',
-      ]),
-    );
-
-    stdout.writeln();
-    stdout.writeln('Architecture: ${config.architecture}');
-    stdout.writeln();
-
-    final result = await Process.run('flutter', ['create', config.projectName]);
+    final result = await Process.run('flutter', ['create', projectName]);
 
     stdout.write(result.stdout);
     stderr.write(result.stderr);
