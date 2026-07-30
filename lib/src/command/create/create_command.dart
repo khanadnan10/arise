@@ -20,7 +20,7 @@ class CreateCommand extends Command<int> {
 
   @override
   Future<int> run() async {
-    stdout.writeln('🚀 Welcome to Arise');
+    stdout.writeln('> Welcome to Arise');
     stdout.writeln();
 
     String? projectName;
@@ -63,6 +63,12 @@ class CreateCommand extends Command<int> {
   }
 
   Future<int> _createFlutterProject(String projectName) async {
+    final shouldContinue = Prompt.confirm('Create project "$projectName"?');
+
+    if (!shouldContinue) {
+      stdout.writeln('Operation cancelled.');
+      return 0;
+    }
     final result = await Process.run('flutter', ['create', projectName]);
 
     stdout.write(result.stdout);
