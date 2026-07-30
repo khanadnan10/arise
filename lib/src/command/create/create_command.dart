@@ -56,8 +56,8 @@ class CreateCommand extends Command<int> {
 
     final packageService = PackageService();
     await packageService.add(config.projectName, [
-      ...getStateManagementPackages(config.stateManagement.label),
-      ...getRoutingPackages(config.routing.label),
+      ...getStateManagementPackages(config.stateManagement),
+      ...getRoutingPackages(config.routing),
     ]);
 
     return 0;

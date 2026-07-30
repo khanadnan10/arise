@@ -1,4 +1,6 @@
 import 'package:arise/src/models/package_info.dart';
+import '../models/state_management.dart';
+import '../models/routing.dart';
 
 const noPackages = <PackageInfo>[];
 
@@ -23,36 +25,38 @@ const autoRoutePackages = [
   PackageInfo(name: 'build_runner', isDevDependency: true),
 ];
 
-List<PackageInfo> getStateManagementPackages(String stateManagement) {
+List<PackageInfo> getStateManagementPackages(
+  StateManagement stateManagement,
+) {
   switch (stateManagement) {
-    case 'Provider':
+    case StateManagement.provider:
       return providerPackages;
 
-    case 'Riverpod':
+    case StateManagement.riverpod:
       return riverpodPackages;
 
-    case 'Bloc':
+    case StateManagement.bloc:
       return blocPackages;
 
-    case 'GetX':
+    case StateManagement.getx:
       return getxPackages;
 
-    case 'None':
-    default:
+    case StateManagement.none:
       return noPackages;
   }
 }
 
-List<PackageInfo> getRoutingPackages(String routing) {
+List<PackageInfo> getRoutingPackages(
+  Routing routing,
+) {
   switch (routing) {
-    case 'GoRouter':
+    case Routing.goRouter:
       return goRouterPackages;
 
-    case 'AutoRoute':
+    case Routing.autoRoute:
       return autoRoutePackages;
 
-    case 'None':
-    default:
+    case Routing.none:
       return noPackages;
   }
 }
