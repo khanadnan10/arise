@@ -36,23 +36,33 @@ class CreateCommand extends Command<int> {
       return 1;
     }
 
-    final projectDirectory = Directory(projectName);
-
-    if (projectDirectory.existsSync()) {
+    if (_projectExists(projectName)) {
       stderr.writeln('❌ Project "$projectName" already exists.');
       return 1;
     }
 
     stdout.writeln();
-    final flutterCheck = await Process.run('flutter', ['--version']);
-
-    if (flutterCheck.exitCode != 0) {
+    if (!await _isFlutterInstalled()) {
       stderr.writeln('❌ Flutter SDK not found.');
       stderr.writeln('Please install Flutter and add it to your PATH.');
       return 1;
     }
+
     stdout.writeln('Creating Flutter project...');
 
+    return _createFlutterProject(projectName);
+  }
+
+  Future<bool> _isFlutterInstalled() async {
+    final result = await Process.run('flutter', ['--version']);
+    return result.exitCode == 0;
+  }
+
+  bool _projectExists(String projectName) {
+    return Directory(projectName).existsSync();
+  }
+
+  Future<int> _createFlutterProject(String projectName) async {
     final result = await Process.run('flutter', ['create', projectName]);
 
     stdout.write(result.stdout);
