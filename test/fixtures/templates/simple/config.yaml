@@ -1,0 +1,18 @@
+name: Simple
+category: test
+
+folders:
+  - lib/core
+  - lib/core/network
+  - lib/core/utils
+  - lib/features
+  - lib/features/auth/data
+
+packages: []
+
+files:
+  - from: files/main.dart
+    to: lib/main.dart
+
+  - from: files/app.dart
+    to: lib/app.dart
