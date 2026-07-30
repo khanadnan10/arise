@@ -1,23 +1,69 @@
-const riverpodPackages = ['flutter_riverpod'];
+import 'package:arise/src/models/package_info.dart';
 
-const goRouterPackages = ['go_router'];
+const noPackages = <PackageInfo>[];
 
-const dioPackages = ['dio'];
+const providerPackages = [PackageInfo(name: 'provider')];
 
-List<String> getStateManagementPackages(String stateManagement) {
+const riverpodPackages = [PackageInfo(name: 'flutter_riverpod')];
+
+const blocPackages = [
+  PackageInfo(name: 'flutter_bloc'),
+  PackageInfo(name: 'bloc'),
+];
+
+const getxPackages = [PackageInfo(name: 'get')];
+
+const dioPackages = [PackageInfo(name: 'dio')];
+
+const goRouterPackages = [PackageInfo(name: 'go_router')];
+
+const autoRoutePackages = [
+  PackageInfo(name: 'auto_route'),
+  PackageInfo(name: 'auto_route_generator', isDevDependency: true),
+  PackageInfo(name: 'build_runner', isDevDependency: true),
+];
+
+List<PackageInfo> getStateManagementPackages(String stateManagement) {
   switch (stateManagement) {
+    case 'Provider':
+      return providerPackages;
+
     case 'Riverpod':
       return riverpodPackages;
+
+    case 'Bloc':
+      return blocPackages;
+
+    case 'GetX':
+      return getxPackages;
+
+    case 'None':
     default:
-      return [];
+      return noPackages;
   }
 }
 
-List<String> getRoutingPackages(String routing) {
+List<PackageInfo> getRoutingPackages(String routing) {
   switch (routing) {
     case 'GoRouter':
       return goRouterPackages;
+
+    case 'AutoRoute':
+      return autoRoutePackages;
+
+    case 'None':
     default:
-      return [];
+      return noPackages;
+  }
+}
+
+List<PackageInfo> getNetworkingPackages(String networking) {
+  switch (networking) {
+    case 'Dio':
+      return dioPackages;
+
+    case 'None':
+    default:
+      return noPackages;
   }
 }
