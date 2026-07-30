@@ -1,9 +1,14 @@
-name: Clean
+name: Clean Architecture
 
 folders:
   - lib/core
+  - lib/features
 
 packages:
   - name: dio
 
-files: []
+  - name: flutter_riverpod
+
+files:
+  - from: files/main.dart
+    to: lib/main.dart
