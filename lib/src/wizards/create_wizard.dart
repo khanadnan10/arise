@@ -1,4 +1,5 @@
 import 'package:arise/src/models/architecture.dart';
+import 'package:arise/src/models/state_management.dart';
 
 import '../models/create_config.dart';
 import '../utils/prompt.dart';
@@ -13,6 +14,7 @@ class CreateWizard {
       return CreateConfig(
         projectName: projectName,
         architecture: Architecture.none,
+        stateManagement: StateManagement.none,
       );
     }
     final name = Prompt.ask('Project name');
@@ -22,7 +24,16 @@ class CreateWizard {
       Architecture.values,
       (architecture) => architecture.label,
     );
+    final stateManagement = Prompt.select(
+      'Select State Management',
+      StateManagement.values,
+      (state) => state.label,
+    );
 
-    return CreateConfig(projectName: name, architecture: architecture);
+    return CreateConfig(
+      projectName: name,
+      architecture: architecture,
+      stateManagement: stateManagement,
+    );
   }
 }
