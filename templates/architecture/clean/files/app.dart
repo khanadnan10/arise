@@ -1,6 +1,3 @@
-class AppTemplate {
-  static String build() {
-    return '''
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -21,8 +18,5 @@ class App extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-''';
   }
 }

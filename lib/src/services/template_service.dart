@@ -1,90 +1,53 @@
 import 'dart:io';
 
-import '../models/architecture.dart';
-import '../templates/app_template.dart';
-import '../templates/main_template.dart';
+import '../models/template_config.dart';
+import 'template_loader.dart';
 
 class TemplateService {
+  final _loader = TemplateLoader();
+
   Future<void> generate({
     required String projectPath,
-    required Architecture architecture,
+    required String templatePath,
   }) async {
-    await _generateMainFile(projectPath);
-    await _generateAppFile(projectPath);
+    final config = await _loader.load(templatePath);
 
-    switch (architecture) {
-      case Architecture.clean:
-        await _generateClean(projectPath);
-        break;
+    await _createFolders(
+      projectPath,
+      config.folders,
+    );
 
-      case Architecture.mvvm:
-        await _generateMvvm(projectPath);
-        break;
-
-      case Architecture.mvc:
-        await _generateMvc(projectPath);
-        break;
-
-      case Architecture.none:
-        break;
-    }
-  }
-
-  Future<void> _generateClean(String path) async {
-    final directories = [
-      '$path/lib/core',
-      '$path/lib/core/constants',
-      '$path/lib/core/network',
-      '$path/lib/core/theme',
-      '$path/lib/core/utils',
-
-      '$path/lib/features',
-
-      '$path/lib/shared',
-      '$path/lib/shared/widgets',
-    ];
-
-    await _createDirectories(directories);
-  }
-
-  Future<void> _generateMvvm(String path) async {
-    final directories = [
-      '$path/lib/core',
-      '$path/lib/features',
-      '$path/lib/shared',
-    ];
-
-    await _createDirectories(directories);
-  }
-
-  Future<void> _generateMvc(String path) async {
-    final directories = [
-      '$path/lib/controllers',
-      '$path/lib/models',
-      '$path/lib/views',
-    ];
-
-    await _createDirectories(directories);
-  }
-
-  Future<void> _createDirectories(List<String> directories) async {
-    for (final directory in directories) {
-      await Directory(directory).create(recursive: true);
-    }
-  }
-  Future<void> _generateAppFile(String projectPath) async {
-    final file = File('$projectPath/lib/app.dart');
-
-    await file.writeAsString(
-      AppTemplate.build(),
+    await _copyFiles(
+      projectPath,
+      templatePath,
+      config.files,
     );
   }
 
-  Future<void> _generateMainFile(String projectPath) async {
-    final file = File('$projectPath/lib/main.dart');
+  Future<void> _createFolders(
+    String projectPath,
+    List<String> folders,
+  ) async {
+    for (final folder in folders) {
+      await Directory('$projectPath/$folder').create(
+        recursive: true,
+      );
+    }
+  }
 
-    await file.writeAsString(
-      MainTemplate.build(),
-    );
+  Future<void> _copyFiles(
+    String projectPath,
+    String templatePath,
+    List<TemplateFile> files,
+  ) async {
+    final templateDirectory = File(templatePath).parent.path;
+
+    for (final file in files) {
+      final source = File('$templateDirectory/${file.from}');
+      final destination = File('$projectPath/${file.to}');
+
+      await destination.parent.create(recursive: true);
+      await destination.writeAsString(await source.readAsString());
+    }
   }
 }

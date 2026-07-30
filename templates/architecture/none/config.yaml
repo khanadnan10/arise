@@ -1,0 +1,17 @@
+name: None
+
+folders:
+  - lib/core
+  - lib/shared
+  - lib/shared/widgets
+
+dependencies: []
+
+dev_dependencies: []
+
+files:
+  - from: files/main.dart
+    to: lib/main.dart
+
+  - from: files/app.dart
+    to: lib/app.dart

@@ -64,7 +64,8 @@ class CreateCommand extends Command<int> {
     final templateService = TemplateService();
     await templateService.generate(
       projectPath: config.projectName,
-      architecture: config.architecture,
+      templatePath:
+          'templates/architecture/${config.architecture.name}/config.yaml',
     );
 
     return 0;
