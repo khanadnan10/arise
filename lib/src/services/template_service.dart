@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import '../models/architecture.dart';
+import '../templates/app_template.dart';
 import '../templates/main_template.dart';
 
 class TemplateService {
@@ -9,6 +10,7 @@ class TemplateService {
     required Architecture architecture,
   }) async {
     await _generateMainFile(projectPath);
+    await _generateAppFile(projectPath);
 
     switch (architecture) {
       case Architecture.clean:
@@ -70,6 +72,14 @@ class TemplateService {
       await Directory(directory).create(recursive: true);
     }
   }
+  Future<void> _generateAppFile(String projectPath) async {
+    final file = File('$projectPath/lib/app.dart');
+
+    await file.writeAsString(
+      AppTemplate.build(),
+    );
+  }
+
   Future<void> _generateMainFile(String projectPath) async {
     final file = File('$projectPath/lib/main.dart');
 
