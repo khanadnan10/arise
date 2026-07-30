@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import '../../utils/prompt.dart';
 
 class CreateCommand extends Command<int> {
   CreateCommand() {
@@ -27,8 +28,7 @@ class CreateCommand extends Command<int> {
     if (argResults?['skip'] == true) {
       projectName = argResults?.rest.firstOrNull;
     } else {
-      stdout.write('Project name: ');
-      projectName = stdin.readLineSync()?.trim();
+      projectName = Prompt.ask('Project name');
     }
 
     if (projectName == null || projectName.isEmpty) {
