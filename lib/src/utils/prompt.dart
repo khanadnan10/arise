@@ -20,4 +20,25 @@ class Prompt {
 
     return input == 'y' || input == 'yes';
   }
+
+  static String select(String title, List<String> options) {
+    stdout.writeln(title);
+
+    for (var i = 0; i < options.length; i++) {
+      stdout.writeln('${i + 1}. ${options[i]}');
+    }
+
+    while (true) {
+      stdout.write('Choice: ');
+
+      final input = stdin.readLineSync()?.trim();
+      final choice = int.tryParse(input ?? '');
+
+      if (choice != null && choice >= 1 && choice <= options.length) {
+        return options[choice - 1];
+      }
+
+      stderr.writeln('Invalid choice. Try again.');
+    }
+  }
 }

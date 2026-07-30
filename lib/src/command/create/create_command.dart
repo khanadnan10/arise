@@ -69,6 +69,17 @@ class CreateCommand extends Command<int> {
       stdout.writeln('Operation cancelled.');
       return 0;
     }
+    final architecture = Prompt.select('Select Architecture', [
+      'None',
+      'Clean Architecture',
+      'MVC',
+      'MVVM',
+    ]);
+
+    stdout.writeln();
+    stdout.writeln('Architecture: $architecture');
+    stdout.writeln();
+
     final result = await Process.run('flutter', ['create', projectName]);
 
     stdout.write(result.stdout);
