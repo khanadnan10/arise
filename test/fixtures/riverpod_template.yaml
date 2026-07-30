@@ -1,0 +1,9 @@
+name: Riverpod
+
+folders:
+  - lib/providers
+
+packages:
+  - name: flutter_riverpod
+
+files: []

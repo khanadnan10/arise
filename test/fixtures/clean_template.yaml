@@ -1,0 +1,9 @@
+name: Clean
+
+folders:
+  - lib/core
+
+packages:
+  - name: dio
+
+files: []
