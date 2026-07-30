@@ -15,10 +15,7 @@ class TemplateConfig {
 }
 
 class TemplateFile {
-  const TemplateFile({
-    required this.from,
-    required this.to,
-  });
+  const TemplateFile({required this.from, required this.to});
 
   final String from;
   final String to;

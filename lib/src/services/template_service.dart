@@ -1,27 +1,21 @@
 import 'dart:io';
 
-import '../models/template_config.dart';
-import 'template_loader.dart';
+import '../models/merged_template.dart';
+import '../models/template_file.dart';
 
 class TemplateService {
-  final _loader = TemplateLoader();
-
   Future<void> generate({
     required String projectPath,
-    required String templatePath,
+    required MergedTemplate template,
+    Map<String, String> customVariables = const {},
   }) async {
-    final config = await _loader.load(templatePath);
+    final allVariables = {
+      ...template.variables,
+      ...customVariables,
+    };
 
-    await _createFolders(
-      projectPath,
-      config.folders,
-    );
-
-    await _copyFiles(
-      projectPath,
-      templatePath,
-      config.files,
-    );
+    await _createFolders(projectPath, template.folders);
+    await _copyFiles(projectPath, template.files, allVariables);
   }
 
   Future<void> _createFolders(
@@ -29,25 +23,27 @@ class TemplateService {
     List<String> folders,
   ) async {
     for (final folder in folders) {
-      await Directory('$projectPath/$folder').create(
-        recursive: true,
-      );
+      await Directory('$projectPath/$folder').create(recursive: true);
     }
   }
 
   Future<void> _copyFiles(
     String projectPath,
-    String templatePath,
     List<TemplateFile> files,
+    Map<String, String> variables,
   ) async {
-    final templateDirectory = File(templatePath).parent.path;
-
     for (final file in files) {
-      final source = File('$templateDirectory/${file.from}');
+      final source = File(file.sourcePath);
       final destination = File('$projectPath/${file.to}');
 
       await destination.parent.create(recursive: true);
-      await destination.writeAsString(await source.readAsString());
+      var content = await source.readAsString();
+
+      variables.forEach((key, value) {
+        content = content.replaceAll('{{$key}}', value);
+      });
+
+      await destination.writeAsString(content);
     }
   }
 }

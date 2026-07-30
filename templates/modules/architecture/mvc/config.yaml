@@ -1,4 +1,8 @@
 name: MVC
+category: architecture
+description: Model-View-Controller pattern with flat top-level structure.
+version: 1.0.0
+author: Arise
 
 folders:
   - lib/controllers
@@ -16,9 +20,7 @@ folders:
   - lib/shared
   - lib/shared/widgets
 
-dependencies: []
-
-dev_dependencies: []
+packages: []
 
 files:
   - from: files/main.dart
@@ -26,3 +28,6 @@ files:
 
   - from: files/app.dart
     to: lib/app.dart
+
+requires: []
+conflicts: []

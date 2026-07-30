@@ -1,10 +1,12 @@
-name: Clean Architecture
+name: MVP
+category: architecture
+description: Model-View-Presenter pattern with explicit presenter layer.
+version: 1.0.0
+author: Arise
 
 folders:
   - lib/core
   - lib/core/constants
-  - lib/core/errors
-  - lib/core/extensions
   - lib/core/network
   - lib/core/services
   - lib/core/theme
@@ -15,9 +17,7 @@ folders:
   - lib/shared
   - lib/shared/widgets
 
-dependencies: []
-
-dev_dependencies: []
+packages: []
 
 files:
   - from: files/main.dart
@@ -25,3 +25,6 @@ files:
 
   - from: files/app.dart
     to: lib/app.dart
+
+requires: []
+conflicts: []

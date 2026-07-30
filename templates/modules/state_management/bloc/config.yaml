@@ -1,0 +1,19 @@
+name: Bloc
+category: state_management
+description: Predictable state management using the BLoC design pattern.
+version: 1.0.0
+author: Arise
+
+folders: []
+
+packages:
+  - name: flutter_bloc
+  - name: bloc
+
+files: []
+
+requires: []
+conflicts:
+  - riverpod
+  - provider
+  - getx

@@ -1,8 +1,14 @@
-name: MVP
+name: Clean Architecture
+category: architecture
+description: Layered architecture with clear separation of data, domain, and presentation.
+version: 1.0.0
+author: Arise
 
 folders:
   - lib/core
   - lib/core/constants
+  - lib/core/errors
+  - lib/core/extensions
   - lib/core/network
   - lib/core/services
   - lib/core/theme
@@ -13,9 +19,7 @@ folders:
   - lib/shared
   - lib/shared/widgets
 
-dependencies: []
-
-dev_dependencies: []
+packages: []
 
 files:
   - from: files/main.dart
@@ -23,3 +27,6 @@ files:
 
   - from: files/app.dart
     to: lib/app.dart
+
+requires: []
+conflicts: []

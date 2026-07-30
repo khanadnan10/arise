@@ -25,9 +25,7 @@ const autoRoutePackages = [
   PackageInfo(name: 'build_runner', isDevDependency: true),
 ];
 
-List<PackageInfo> getStateManagementPackages(
-  StateManagement stateManagement,
-) {
+List<PackageInfo> getStateManagementPackages(StateManagement stateManagement) {
   switch (stateManagement) {
     case StateManagement.provider:
       return providerPackages;
@@ -46,9 +44,7 @@ List<PackageInfo> getStateManagementPackages(
   }
 }
 
-List<PackageInfo> getRoutingPackages(
-  Routing routing,
-) {
+List<PackageInfo> getRoutingPackages(Routing routing) {
   switch (routing) {
     case Routing.goRouter:
       return goRouterPackages;

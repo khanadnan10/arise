@@ -2,11 +2,7 @@ import 'package:args/command_runner.dart';
 
 class FeatureCommand extends Command<int> {
   FeatureCommand() {
-    argParser.addOption(
-      'name',
-      abbr: 'n',
-      help: 'Feature name',
-    );
+    argParser.addOption('name', abbr: 'n', help: 'Feature name');
   }
 
   @override
@@ -20,10 +16,7 @@ class FeatureCommand extends Command<int> {
     final featureName = argResults?.rest.firstOrNull;
 
     if (featureName == null) {
-      throw UsageException(
-        'Feature name is required.',
-        usage,
-      );
+      throw UsageException('Feature name is required.', usage);
     }
 
     print('Generating feature: $featureName');

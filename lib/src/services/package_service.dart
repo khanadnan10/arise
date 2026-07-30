@@ -1,15 +1,21 @@
 import 'dart:io';
 
-import 'package:arise/src/models/package_info.dart';
+import '../models/template_package.dart';
 
 class PackageService {
-  Future<void> add(String projectPath, List<PackageInfo> packages) async {
+  Future<void> install(
+    String projectPath,
+    List<TemplatePackage> packages,
+  ) async {
     for (final package in packages) {
       final result = await Process.run('flutter', [
         'pub',
         'add',
-        if (package.isDevDependency) '--dev',
-        package.name,
+        if (package.dev) '--dev',
+        if (package.version != null)
+          '${package.name}:${package.version}'
+        else
+          package.name,
       ], workingDirectory: projectPath);
 
       stdout.write(result.stdout);

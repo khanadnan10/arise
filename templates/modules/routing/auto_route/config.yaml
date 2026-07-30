@@ -1,0 +1,30 @@
+name: AutoRoute
+category: routing
+description: Code-generated declarative routing with deep link support.
+version: 1.0.0
+author: Arise
+
+folders: []
+
+packages:
+  - name: auto_route
+
+  - name: auto_route_generator
+    dev: true
+
+  - name: build_runner
+    dev: true
+
+hooks:
+  - phase: postGenerate
+    command: dart
+    args:
+      - run
+      - build_runner
+      - build
+
+files: []
+
+requires: []
+conflicts:
+  - go_router

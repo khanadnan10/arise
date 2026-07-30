@@ -1,0 +1,16 @@
+name: GoRouter
+category: routing
+description: Declarative routing for Flutter using the Router API.
+version: 1.0.0
+author: Arise
+
+folders: []
+
+packages:
+  - name: go_router
+
+files: []
+
+requires: []
+conflicts:
+  - auto_route

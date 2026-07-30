@@ -1,4 +1,8 @@
 name: MVVM
+category: architecture
+description: Model-View-ViewModel pattern with reactive data binding.
+version: 1.0.0
+author: Arise
 
 folders:
   - lib/core
@@ -13,9 +17,7 @@ folders:
   - lib/shared
   - lib/shared/widgets
 
-dependencies: []
-
-dev_dependencies: []
+packages: []
 
 files:
   - from: files/main.dart
@@ -23,3 +25,6 @@ files:
 
   - from: files/app.dart
     to: lib/app.dart
+
+requires: []
+conflicts: []

@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:arise/src/constants/packages.dart';
 import 'package:arise/src/models/create_config.dart';
+import 'package:arise/src/models/template_hook.dart';
+import 'package:arise/src/services/hook_service.dart';
+import 'package:arise/src/services/manifest_service.dart';
 import 'package:arise/src/services/package_service.dart';
+import '../../services/template_merger.dart';
+import '../../services/template_registry.dart';
 import '../../services/template_service.dart';
 import '../../wizards/create_wizard.dart';
 
@@ -16,6 +20,7 @@ class CreateCommand extends Command<int> {
       negatable: false,
     );
   }
+
   @override
   String get name => 'create';
 
@@ -27,9 +32,7 @@ class CreateCommand extends Command<int> {
     stdout.writeln('> Welcome to Arise');
     stdout.writeln();
 
-    CreateConfig config;
-
-    config = await CreateWizard().run(
+    final config = await CreateWizard().run(
       skip: argResults?['skip'] == true,
       projectName: argResults?.rest.firstOrNull,
     );
@@ -55,20 +58,77 @@ class CreateCommand extends Command<int> {
 
     await _createFlutterProject(projectName);
 
-    final packageService = PackageService();
-    await packageService.add(config.projectName, [
-      ...getStateManagementPackages(config.stateManagement),
-      ...getRoutingPackages(config.routing),
-    ]);
+    final paths = _resolveTemplatePaths(config);
 
-    final templateService = TemplateService();
-    await templateService.generate(
-      projectPath: config.projectName,
-      templatePath:
-          'templates/architecture/${config.architecture.name}/config.yaml',
+    final registry = TemplateRegistry();
+    final modules = await registry.loadModules(paths: paths);
+
+    final merger = TemplateMerger();
+    final merged = merger.merge(modules);
+
+    final hookService = HookService();
+
+    // 1. preGenerate hooks
+    await hookService.runHooks(
+      projectPath: projectName,
+      hooks: merged.hooks,
+      phase: HookPhase.preGenerate,
     );
 
+    // 2. Generate template structure & files
+    final templateService = TemplateService();
+    await templateService.generate(
+      projectPath: projectName,
+      template: merged,
+      customVariables: {
+        'project_name': projectName,
+        'app_name': projectName,
+      },
+    );
+
+    // 3. postGenerate hooks
+    await hookService.runHooks(
+      projectPath: projectName,
+      hooks: merged.hooks,
+      phase: HookPhase.postGenerate,
+    );
+
+    // 4. Install packages
+    final packageService = PackageService();
+    await packageService.install(projectName, merged.packages);
+
+    // 5. postPubGet hooks
+    await hookService.runHooks(
+      projectPath: projectName,
+      hooks: merged.hooks,
+      phase: HookPhase.postPubGet,
+    );
+
+    // 6. Save manifest
+    final manifestService = ManifestService();
+    await manifestService.save(
+      projectPath: projectName,
+      architecture: config.architecture.name,
+      modules: [
+        if (config.stateManagement.name != 'none') config.stateManagement.name,
+        if (config.routing.templateName != 'none') config.routing.templateName,
+      ],
+    );
+
+    stdout.writeln();
+    stdout.writeln('✅ Project "$projectName" generated successfully!');
+
     return 0;
+  }
+
+  List<String> _resolveTemplatePaths(CreateConfig config) {
+    return [
+      'templates/modules/architecture/${config.architecture.name}/config.yaml',
+      if (config.stateManagement.name != 'none')
+        'templates/modules/state_management/${config.stateManagement.name}/config.yaml',
+      if (config.routing.templateName != 'none')
+        'templates/modules/routing/${config.routing.templateName}/config.yaml',
+    ];
   }
 
   Future<bool> _isFlutterInstalled() async {

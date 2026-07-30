@@ -8,15 +8,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Arise App',
-      theme: ThemeData(
-        colorSchemeSeed: Colors.blue,
-        useMaterial3: true,
-      ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('Welcome to Arise 🚀'),
-        ),
-      ),
+      theme: ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true),
+      home: const Scaffold(body: Center(child: Text('Welcome to Arise 🚀'))),
     );
   }
 }
