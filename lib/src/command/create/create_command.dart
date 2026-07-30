@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import '../../utils/prompt.dart';
+import '../../models/create_config.dart';
 
 class CreateCommand extends Command<int> {
   CreateCommand() {
@@ -69,18 +70,21 @@ class CreateCommand extends Command<int> {
       stdout.writeln('Operation cancelled.');
       return 0;
     }
-    final architecture = Prompt.select('Select Architecture', [
-      'None',
-      'Clean Architecture',
-      'MVC',
-      'MVVM',
-    ]);
+    final config = CreateConfig(
+      projectName: projectName,
+      architecture: Prompt.select('Select Architecture', [
+        'None',
+        'Clean Architecture',
+        'MVC',
+        'MVVM',
+      ]),
+    );
 
     stdout.writeln();
-    stdout.writeln('Architecture: $architecture');
+    stdout.writeln('Architecture: ${config.architecture}');
     stdout.writeln();
 
-    final result = await Process.run('flutter', ['create', projectName]);
+    final result = await Process.run('flutter', ['create', config.projectName]);
 
     stdout.write(result.stdout);
     stderr.write(result.stderr);
