@@ -44,6 +44,13 @@ class CreateCommand extends Command<int> {
     }
 
     stdout.writeln();
+    final flutterCheck = await Process.run('flutter', ['--version']);
+
+    if (flutterCheck.exitCode != 0) {
+      stderr.writeln('❌ Flutter SDK not found.');
+      stderr.writeln('Please install Flutter and add it to your PATH.');
+      return 1;
+    }
     stdout.writeln('Creating Flutter project...');
 
     final result = await Process.run('flutter', ['create', projectName]);
