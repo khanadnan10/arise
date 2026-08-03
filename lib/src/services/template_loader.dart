@@ -63,11 +63,7 @@ class TemplateLoader {
       );
       final command = e['command'] as String;
       final args = List<String>.from(e['args'] ?? []);
-      return TemplateHook(
-        phase: phase,
-        command: command,
-        args: args,
-      );
+      return TemplateHook(phase: phase, command: command, args: args);
     }).toList();
   }
 }

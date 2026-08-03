@@ -81,10 +81,7 @@ class CreateCommand extends Command<int> {
     await templateService.generate(
       projectPath: projectName,
       template: merged,
-      customVariables: {
-        'project_name': projectName,
-        'app_name': projectName,
-      },
+      customVariables: {'project_name': projectName, 'app_name': projectName},
     );
 
     // 3. postGenerate hooks

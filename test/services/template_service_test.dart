@@ -16,9 +16,7 @@ void main() {
     service = TemplateService();
     loader = TemplateLoader();
     merger = TemplateMerger();
-    tempDir = await Directory.systemTemp.createTemp(
-      'arise_test_',
-    );
+    tempDir = await Directory.systemTemp.createTemp('arise_test_');
   });
 
   tearDown(() async {
@@ -42,93 +40,51 @@ void main() {
 
   group('TemplateService', () {
     test('creates folders', () async {
-      await generateFromPath(
-        'test/fixtures/templates/simple/config.yaml',
-      );
+      await generateFromPath('test/fixtures/templates/simple/config.yaml');
 
-      expect(
-        Directory(
-          '${tempDir.path}/lib/core',
-        ).existsSync(),
-        isTrue,
-      );
+      expect(Directory('${tempDir.path}/lib/core').existsSync(), isTrue);
 
-      expect(
-        Directory(
-          '${tempDir.path}/lib/features',
-        ).existsSync(),
-        isTrue,
-      );
+      expect(Directory('${tempDir.path}/lib/features').existsSync(), isTrue);
     });
 
     test('creates nested folders', () async {
-      await generateFromPath(
-        'test/fixtures/templates/simple/config.yaml',
-      );
+      await generateFromPath('test/fixtures/templates/simple/config.yaml');
 
       expect(
-        Directory(
-          '${tempDir.path}/lib/core/network',
-        ).existsSync(),
+        Directory('${tempDir.path}/lib/core/network').existsSync(),
         isTrue,
       );
 
       expect(
-        Directory(
-          '${tempDir.path}/lib/features/auth/data',
-        ).existsSync(),
+        Directory('${tempDir.path}/lib/features/auth/data').existsSync(),
         isTrue,
       );
     });
 
     test('copies template directory recursively', () async {
-      await generateFromPath(
-        'test/fixtures/templates/simple/config.yaml',
-      );
+      await generateFromPath('test/fixtures/templates/simple/config.yaml');
+
+      expect(File('${tempDir.path}/lib/main.dart').existsSync(), isTrue);
+
+      expect(File('${tempDir.path}/lib/app.dart').existsSync(), isTrue);
 
       expect(
-        File(
-          '${tempDir.path}/lib/main.dart',
-        ).existsSync(),
+        File('${tempDir.path}/test/widget_test.dart').existsSync(),
         isTrue,
       );
 
       expect(
-        File(
-          '${tempDir.path}/lib/app.dart',
-        ).existsSync(),
+        File('${tempDir.path}/analysis_options.yaml').existsSync(),
         isTrue,
       );
 
-      expect(
-        File(
-          '${tempDir.path}/test/widget_test.dart',
-        ).existsSync(),
-        isTrue,
-      );
-
-      expect(
-        File(
-          '${tempDir.path}/analysis_options.yaml',
-        ).existsSync(),
-        isTrue,
-      );
-
-      expect(
-        File(
-          '${tempDir.path}/README.md',
-        ).existsSync(),
-        isTrue,
-      );
+      expect(File('${tempDir.path}/README.md').existsSync(), isTrue);
 
       final content = await File(
         '${tempDir.path}/lib/main.dart',
       ).readAsString();
 
-      expect(
-        content,
-        contains('void main'),
-      );
+      expect(content, contains('void main'));
     });
 
     test('replaces template variables', () async {
@@ -140,21 +96,13 @@ void main() {
         },
       );
 
-      final content = await File(
-        '${tempDir.path}/README.md',
-      ).readAsString();
+      final content = await File('${tempDir.path}/README.md').readAsString();
 
-      expect(
-        content,
-        contains('Simple App'),
-      );
+      expect(content, contains('Simple App'));
     });
 
     test('throws when template does not exist', () async {
-      expect(
-        () => generateFromPath('missing/config.yaml'),
-        throwsException,
-      );
+      expect(() => generateFromPath('missing/config.yaml'), throwsException);
     });
 
     test('runs pre hooks', () async {});

@@ -23,11 +23,7 @@ Future<void> copyDirectory(
         variables: variables,
       );
     } else if (entity is File) {
-      await _copyFile(
-        entity,
-        File(destinationPath),
-        variables,
-      );
+      await _copyFile(entity, File(destinationPath), variables);
     }
   }
 }
@@ -40,10 +36,7 @@ Future<void> _copyFile(
   var content = await source.readAsString();
 
   for (final entry in variables.entries) {
-    content = content.replaceAll(
-      '{{${entry.key}}}',
-      entry.value,
-    );
+    content = content.replaceAll('{{${entry.key}}}', entry.value);
   }
 
   await destination.parent.create(recursive: true);

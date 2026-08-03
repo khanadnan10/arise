@@ -13,99 +13,48 @@ void main() {
 
   group('TemplateMerger', () {
     test('merges folders', () {
-      final module = createModule(
-        folders: [
-          'lib/core',
-          'lib/features',
-        ],
-      );
+      final module = createModule(folders: ['lib/core', 'lib/features']);
 
       final result = merger.merge([module]);
 
-      expect(
-        result.folders,
-        containsAll([
-          'lib/core',
-          'lib/features',
-        ]),
-      );
+      expect(result.folders, containsAll(['lib/core', 'lib/features']));
     });
 
     test('removes duplicate folders', () {
-      final module1 = createModule(
-        folders: [
-          'lib/core',
-          'lib/features',
-        ],
-      );
+      final module1 = createModule(folders: ['lib/core', 'lib/features']);
 
-      final module2 = createModule(
-        folders: [
-          'lib/core',
-          'lib/shared',
-        ],
-      );
+      final module2 = createModule(folders: ['lib/core', 'lib/shared']);
 
-      final result = merger.merge([
-        module1,
-        module2,
-      ]);
+      final result = merger.merge([module1, module2]);
 
-      expect(
-        result.folders.length,
-        3,
-      );
+      expect(result.folders.length, 3);
 
       expect(
         result.folders,
-        containsAll([
-          'lib/core',
-          'lib/features',
-          'lib/shared',
-        ]),
+        containsAll(['lib/core', 'lib/features', 'lib/shared']),
       );
     });
 
     test('merges packages', () {
       final module = createModule(
-        packages: [
-          pkg('dio'),
-          pkg('flutter_riverpod'),
-        ],
+        packages: [pkg('dio'), pkg('flutter_riverpod')],
       );
 
       final result = merger.merge([module]);
 
-      expect(
-        result.packages.length,
-        2,
-      );
+      expect(result.packages.length, 2);
     });
 
     test('removes duplicate packages', () {
       final module1 = createModule(
-        packages: [
-          pkg('dio'),
-          pkg('flutter_riverpod'),
-        ],
+        packages: [pkg('dio'), pkg('flutter_riverpod')],
       );
 
-      final module2 = createModule(
-        packages: [
-          pkg('dio'),
-          pkg('hive'),
-        ],
-      );
+      final module2 = createModule(packages: [pkg('dio'), pkg('hive')]);
 
-      final result = merger.merge([
-        module1,
-        module2,
-      ]);
+      final result = merger.merge([module1, module2]);
 
-      expect(
-        result.packages.length,
-        3,
-      );
+      expect(result.packages.length, 3);
     });
 
     test('merges template directories', () {
@@ -179,12 +128,6 @@ TemplateModule createModule({
   );
 }
 
-TemplatePackage pkg(
-  String name, {
-  bool dev = false,
-}) {
-  return TemplatePackage(
-    name: name,
-    dev: dev,
-  );
+TemplatePackage pkg(String name, {bool dev = false}) {
+  return TemplatePackage(name: name, dev: dev);
 }

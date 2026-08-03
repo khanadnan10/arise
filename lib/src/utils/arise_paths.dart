@@ -15,9 +15,7 @@ class ArisePaths {
     );
 
     if (resolvedUri == null) {
-      throw StateError(
-        'Unable to locate the Arise package.',
-      );
+      throw StateError('Unable to locate the Arise package.');
     }
 
     // resolvedUri → file://.../arise/lib/arise.dart

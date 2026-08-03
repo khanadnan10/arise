@@ -1,8 +1,4 @@
-enum HookPhase {
-  preGenerate,
-  postGenerate,
-  postPubGet,
-}
+enum HookPhase { preGenerate, postGenerate, postPubGet }
 
 class TemplateHook {
   const TemplateHook({

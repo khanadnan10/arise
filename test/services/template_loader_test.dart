@@ -11,54 +11,31 @@ void main() {
 
   group('TemplateLoader', () {
     test('loads valid template', () async {
-      final template = await loader.load(
-        'test/fixtures/clean_template.yaml',
-      );
+      final template = await loader.load('test/fixtures/clean_template.yaml');
 
-      expect(
-        template.name,
-        'Clean Architecture',
-      );
+      expect(template.name, 'Clean Architecture');
 
-      expect(
-        template.folders.length,
-        2,
-      );
+      expect(template.folders.length, 2);
 
-      expect(
-        template.packages.length,
-        2,
-      );
+      expect(template.packages.length, 2);
 
-      expect(
-        template.templateDir,
-        'test/fixtures',
-      );
+      expect(template.templateDir, 'test/fixtures');
     });
 
     test('loads empty template', () async {
-      final template = await loader.load(
-        'test/fixtures/empty_template.yaml',
-      );
+      final template = await loader.load('test/fixtures/empty_template.yaml');
 
       expect(template.folders, isEmpty);
       expect(template.packages, isEmpty);
     });
 
     test('throws if file does not exist', () async {
-      expect(
-        () => loader.load(
-          'does_not_exist.yaml',
-        ),
-        throwsException,
-      );
+      expect(() => loader.load('does_not_exist.yaml'), throwsException);
     });
 
     test('throws for malformed yaml', () async {
       expect(
-        () => loader.load(
-          'test/fixtures/malformed.yaml',
-        ),
+        () => loader.load('test/fixtures/malformed.yaml'),
         throwsException,
       );
     });

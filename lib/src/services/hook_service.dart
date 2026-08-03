@@ -11,7 +11,9 @@ class HookService {
     final phaseHooks = hooks.where((h) => h.phase == phase).toList();
 
     for (final hook in phaseHooks) {
-      stdout.writeln('Running hook [${hook.phase.name}]: ${hook.command} ${hook.args.join(' ')}');
+      stdout.writeln(
+        'Running hook [${hook.phase.name}]: ${hook.command} ${hook.args.join(' ')}',
+      );
       final result = await Process.run(
         hook.command,
         hook.args,
