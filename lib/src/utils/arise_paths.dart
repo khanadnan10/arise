@@ -42,4 +42,9 @@ class ArisePaths {
   static String routingTemplate(String name) {
     return '$packageRoot/templates/modules/routing/$name/config.yaml';
   }
+
+  /// Absolute path to a networking config.yaml.
+  static String networkingTemplate(String name) {
+    return '$packageRoot/templates/modules/networking/$name/config.yaml';
+  }
 }

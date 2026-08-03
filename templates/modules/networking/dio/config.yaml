@@ -1,0 +1,14 @@
+name: Dio
+
+category: networking
+description: A powerful HTTP client for Dart/Flutter.
+version: 1.0.0
+author: Arise
+
+folders: []
+
+packages:
+  - name: dio
+
+requires: []
+conflicts: []

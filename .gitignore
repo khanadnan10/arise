@@ -1,9 +1,31 @@
 # https://dart.dev/guides/libraries/private-files
 # Created by `dart pub`
 .dart_tool/
+.packages
+.pub/
+.pub-cache/
 pubspec.lock
 
-/my_app
+# Conventional directory for build outputs
+build/
+
+# Coverage info
 coverage/
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Test outputs & temporary project generations
+my_app/
+*_test_app/
+arise_*
 test/output/
 test/tmp/
