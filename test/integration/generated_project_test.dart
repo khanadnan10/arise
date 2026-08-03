@@ -7,82 +7,87 @@ import 'package:arise/src/services/template_merger.dart';
 import 'package:arise/src/services/template_service.dart';
 
 void main() {
-  test(
-    'generated Flutter project passes analyze and test',
-    () async {
-      final tempDirectory = await Directory.systemTemp.createTemp(
-        'arise_integration_',
-      );
+  const architectures = ['clean', 'mvvm', 'mvc', 'mvp'];
 
-      final projectPath = '${tempDirectory.path}/test_app';
-
-      try {
-        // 1. Create a real Flutter project.
-        final createResult = await Process.run(
-          'flutter',
-          ['create', 'test_app'],
-          workingDirectory: tempDirectory.path,
+  for (final architecture in architectures) {
+    test(
+      '$architecture project passes analyze and test',
+      () async {
+        final tempDirectory = await Directory.systemTemp.createTemp(
+          'arise_${architecture}_integration_',
         );
 
-        expect(
-          createResult.exitCode,
-          0,
-          reason: createResult.stderr.toString(),
-        );
+        final projectName = '${architecture}_test_app';
+        final projectPath = '${tempDirectory.path}/$projectName';
 
-        // 2. Apply the Arise template engine.
-        final module = await TemplateLoader().load(
-          'templates/modules/architecture/clean/config.yaml',
-        );
+        try {
+          // 1. Create a real Flutter project.
+          final createResult = await Process.run(
+            'flutter',
+            ['create', projectName],
+            workingDirectory: tempDirectory.path,
+          );
 
-        final merged = TemplateMerger().merge([module]);
+          expect(
+            createResult.exitCode,
+            0,
+            reason: createResult.stderr.toString(),
+          );
 
-        await TemplateService().generate(
-          projectPath: projectPath,
-          template: merged,
-        );
+          // 2. Apply the Arise template engine.
+          final module = await TemplateLoader().load(
+            'templates/modules/architecture/$architecture/config.yaml',
+          );
 
-        // 3. Verify the generated project is clean.
-        final analyzeResult = await Process.run(
-          'flutter',
-          ['analyze'],
-          workingDirectory: projectPath,
-        );
+          final merged = TemplateMerger().merge([module]);
 
-        expect(
-          analyzeResult.exitCode,
-          0,
-          reason: '''
-flutter analyze failed:
+          await TemplateService().generate(
+            projectPath: projectPath,
+            template: merged,
+          );
+
+          // 3. Verify the generated project is clean.
+          final analyzeResult = await Process.run(
+            'flutter',
+            ['analyze'],
+            workingDirectory: projectPath,
+          );
+
+          expect(
+            analyzeResult.exitCode,
+            0,
+            reason: '''
+$architecture: flutter analyze failed
 
 ${analyzeResult.stdout}
 ${analyzeResult.stderr}
 ''',
-        );
+          );
 
-        // 4. Verify all tests pass.
-        final testResult = await Process.run(
-          'flutter',
-          ['test'],
-          workingDirectory: projectPath,
-        );
+          // 4. Verify all tests pass.
+          final testResult = await Process.run(
+            'flutter',
+            ['test'],
+            workingDirectory: projectPath,
+          );
 
-        expect(
-          testResult.exitCode,
-          0,
-          reason: '''
-flutter test failed:
+          expect(
+            testResult.exitCode,
+            0,
+            reason: '''
+$architecture: flutter test failed
 
 ${testResult.stdout}
 ${testResult.stderr}
 ''',
-        );
-      } finally {
-        if (await tempDirectory.exists()) {
-          await tempDirectory.delete(recursive: true);
+          );
+        } finally {
+          if (await tempDirectory.exists()) {
+            await tempDirectory.delete(recursive: true);
+          }
         }
-      }
-    },
-    timeout: const Timeout(Duration(minutes: 5)),
-  );
+      },
+      timeout: const Timeout(Duration(minutes: 5)),
+    );
+  }
 }
