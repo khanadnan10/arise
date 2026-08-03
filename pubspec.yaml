@@ -6,6 +6,9 @@ repository: https://github.com/khanadnan10/arise
 environment:
   sdk: ^3.9.2
 
+executables:
+  arise: arise
+
 # Add regular dependencies here.
 dependencies:
   args: ^2.7.0
