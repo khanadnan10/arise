@@ -26,6 +26,6 @@ Thumbs.db
 # Test outputs & temporary project generations
 my_app/
 *_test_app/
-arise_*
+/arise_*
 test/output/
 test/tmp/

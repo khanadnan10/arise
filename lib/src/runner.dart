@@ -6,7 +6,5 @@ class AriseCommandRunner extends CommandRunner<int> {
   AriseCommandRunner()
     : super('arise', 'A CLI to bootstrap and manage Flutter projects.') {
     addCommand(CreateCommand());
-    // TODO: Implement Generate Command
-    // addCommand(GenerateCommand());
   }
 }

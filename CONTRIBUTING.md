@@ -47,7 +47,7 @@ arise/
 ├── templates/
 │   └── modules/
 ├── test/
-├── docs/
+├── doc/
 ├── README.md
 └── pubspec.yaml
 ```
@@ -73,7 +73,7 @@ If you're adding a new integration, first determine whether it can be implemente
 See:
 
 ```text
-docs/creating-modules.md
+doc/creating-modules.md
 ```
 
 A new module should include:
