@@ -9,6 +9,7 @@ import 'package:arise/src/services/package_service.dart';
 import '../../services/template_merger.dart';
 import '../../services/template_registry.dart';
 import '../../services/template_service.dart';
+import '../../utils/arise_paths.dart';
 import '../../wizards/create_wizard.dart';
 
 class CreateCommand extends Command<int> {
@@ -123,11 +124,11 @@ class CreateCommand extends Command<int> {
 
   List<String> _resolveTemplatePaths(CreateConfig config) {
     return [
-      'templates/modules/architecture/${config.architecture.name}/config.yaml',
+      ArisePaths.architectureTemplate(config.architecture.name),
       if (config.stateManagement.name != 'none')
-        'templates/modules/state_management/${config.stateManagement.name}/config.yaml',
+        ArisePaths.stateManagementTemplate(config.stateManagement.name),
       if (config.routing.templateName != 'none')
-        'templates/modules/routing/${config.routing.templateName}/config.yaml',
+        ArisePaths.routingTemplate(config.routing.templateName),
     ];
   }
 

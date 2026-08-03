@@ -1,14 +1,5 @@
 name: None
-category: architecture
-description: No specific architecture. Minimal project scaffold.
-version: 1.0.0
-author: Arise
 
-folders:
-  - lib/core
-  - lib/shared
-  - lib/shared/widgets
+folders: []
 
 packages: []
-requires: []
-conflicts: []
