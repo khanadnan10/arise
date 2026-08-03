@@ -27,12 +27,16 @@ void main() {
     }
   });
 
-  Future<void> generateFromPath(String templatePath) async {
+  Future<void> generateFromPath(
+    String templatePath, {
+    Map<String, String> customVariables = const {},
+  }) async {
     final module = await loader.load(templatePath);
     final merged = merger.merge([module]);
     await service.generate(
       projectPath: tempDir.path,
       template: merged,
+      customVariables: customVariables,
     );
   }
 
@@ -77,7 +81,7 @@ void main() {
       );
     });
 
-    test('copies template files', () async {
+    test('copies template directory recursively', () async {
       await generateFromPath(
         'test/fixtures/templates/simple/config.yaml',
       );
@@ -96,6 +100,27 @@ void main() {
         isTrue,
       );
 
+      expect(
+        File(
+          '${tempDir.path}/test/widget_test.dart',
+        ).existsSync(),
+        isTrue,
+      );
+
+      expect(
+        File(
+          '${tempDir.path}/analysis_options.yaml',
+        ).existsSync(),
+        isTrue,
+      );
+
+      expect(
+        File(
+          '${tempDir.path}/README.md',
+        ).existsSync(),
+        isTrue,
+      );
+
       final content = await File(
         '${tempDir.path}/lib/main.dart',
       ).readAsString();
@@ -106,14 +131,31 @@ void main() {
       );
     });
 
+    test('replaces template variables', () async {
+      await generateFromPath(
+        'test/fixtures/templates/simple/config.yaml',
+        customVariables: {
+          'project_name': 'my_test_app',
+          'app_name': 'MyTestApp',
+        },
+      );
+
+      final content = await File(
+        '${tempDir.path}/README.md',
+      ).readAsString();
+
+      expect(
+        content,
+        contains('Simple App'),
+      );
+    });
+
     test('throws when template does not exist', () async {
       expect(
         () => generateFromPath('missing/config.yaml'),
         throwsException,
       );
     });
-
-    test('replaces template variables', () async {});
 
     test('runs pre hooks', () async {});
 

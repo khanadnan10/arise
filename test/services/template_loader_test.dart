@@ -31,8 +31,8 @@ void main() {
       );
 
       expect(
-        template.files.length,
-        1,
+        template.templateDir,
+        'test/fixtures',
       );
     });
 
@@ -43,7 +43,6 @@ void main() {
 
       expect(template.folders, isEmpty);
       expect(template.packages, isEmpty);
-      expect(template.files, isEmpty);
     });
 
     test('throws if file does not exist', () async {
@@ -67,8 +66,6 @@ void main() {
     test('supports missing folders key', () async {});
 
     test('supports missing packages key', () async {});
-
-    test('supports missing files key', () async {});
 
     test('supports package dev flag', () async {});
 

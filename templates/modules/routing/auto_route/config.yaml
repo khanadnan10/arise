@@ -23,8 +23,6 @@ hooks:
       - build_runner
       - build
 
-files: []
-
 requires: []
 conflicts:
   - go_router

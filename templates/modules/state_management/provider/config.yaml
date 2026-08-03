@@ -9,8 +9,6 @@ folders: []
 packages:
   - name: provider
 
-files: []
-
 requires: []
 conflicts:
   - riverpod

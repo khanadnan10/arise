@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import '../models/merged_template.dart';
-import '../models/template_file.dart';
+import '../utils/directory_copy.dart';
 
 class TemplateService {
   Future<void> generate({
@@ -15,7 +15,10 @@ class TemplateService {
     };
 
     await _createFolders(projectPath, template.folders);
-    await _copyFiles(projectPath, template.files, allVariables);
+
+    for (final templateDir in template.templateDirectories) {
+      await _copyTemplateDirectory(projectPath, templateDir, allVariables);
+    }
   }
 
   Future<void> _createFolders(
@@ -27,23 +30,27 @@ class TemplateService {
     }
   }
 
-  Future<void> _copyFiles(
+  Future<void> _copyTemplateDirectory(
     String projectPath,
-    List<TemplateFile> files,
+    String templateDir,
     Map<String, String> variables,
   ) async {
-    for (final file in files) {
-      final source = File(file.sourcePath);
-      final destination = File('$projectPath/${file.to}');
+    final source = Directory('$templateDir/files');
 
-      await destination.parent.create(recursive: true);
-      var content = await source.readAsString();
-
-      variables.forEach((key, value) {
-        content = content.replaceAll('{{$key}}', value);
-      });
-
-      await destination.writeAsString(content);
+    if (!await source.exists()) {
+      return;
     }
+
+    await copyDirectory(
+      source,
+      Directory(projectPath),
+      render: (content) async {
+        var rendered = content;
+        variables.forEach((key, value) {
+          rendered = rendered.replaceAll('{{$key}}', value);
+        });
+        return rendered;
+      },
+    );
   }
 }

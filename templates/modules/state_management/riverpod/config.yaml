@@ -9,8 +9,6 @@ folders: []
 packages:
   - name: flutter_riverpod
 
-files: []
-
 requires: []
 conflicts:
   - provider

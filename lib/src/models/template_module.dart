@@ -1,4 +1,3 @@
-import 'template_file.dart';
 import 'template_hook.dart';
 import 'template_package.dart';
 
@@ -8,7 +7,6 @@ class TemplateModule {
     required this.category,
     required this.folders,
     required this.packages,
-    required this.files,
     this.description,
     this.version,
     this.author,
@@ -16,6 +14,7 @@ class TemplateModule {
     this.conflicts = const [],
     this.variables = const {},
     this.hooks = const [],
+    this.templateDir,
   });
 
   final String name;
@@ -26,10 +25,10 @@ class TemplateModule {
 
   final List<String> folders;
   final List<TemplatePackage> packages;
-  final List<TemplateFile> files;
 
   final List<String> requires;
   final List<String> conflicts;
   final Map<String, String> variables;
   final List<TemplateHook> hooks;
+  final String? templateDir;
 }

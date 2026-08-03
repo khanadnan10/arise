@@ -1,4 +1,5 @@
 name: Clean Architecture
+category: test
 
 folders:
   - lib/core
@@ -6,9 +7,4 @@ folders:
 
 packages:
   - name: dio
-
   - name: flutter_riverpod
-
-files:
-  - from: files/main.dart
-    to: lib/main.dart

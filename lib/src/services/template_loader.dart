@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:yaml/yaml.dart';
 
-import '../models/template_file.dart';
 import '../models/template_hook.dart';
 import '../models/template_module.dart';
 import '../models/template_package.dart';
@@ -26,11 +25,11 @@ class TemplateLoader {
       author: yaml['author'] as String?,
       folders: List<String>.from(yaml['folders'] ?? []),
       packages: _parsePackages(yaml['packages']),
-      files: _parseFiles(yaml['files'], templateDir),
       requires: List<String>.from(yaml['requires'] ?? []),
       conflicts: List<String>.from(yaml['conflicts'] ?? []),
       variables: _parseVariables(yaml['variables']),
       hooks: _parseHooks(yaml['hooks']),
+      templateDir: templateDir,
     );
   }
 
@@ -41,16 +40,6 @@ class TemplateLoader {
         name: e['name'] as String,
         dev: e['dev'] as bool? ?? false,
         version: e['version'] as String?,
-      );
-    }).toList();
-  }
-
-  List<TemplateFile> _parseFiles(dynamic value, String templateDir) {
-    if (value == null) return [];
-    return (value as YamlList).map((e) {
-      return TemplateFile(
-        sourcePath: '$templateDir/${e['from']}',
-        to: e['to'] as String,
       );
     }).toList();
   }

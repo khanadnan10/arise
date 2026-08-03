@@ -9,8 +9,6 @@ folders: []
 packages:
   - name: go_router
 
-files: []
-
 requires: []
 conflicts:
   - auto_route

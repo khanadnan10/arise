@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
 
-import 'package:arise/src/models/template_file.dart';
 import 'package:arise/src/models/template_module.dart';
 import 'package:arise/src/models/template_package.dart';
 import 'package:arise/src/services/template_merger.dart';
@@ -109,25 +108,16 @@ void main() {
       );
     });
 
-    test('merges files', () {
+    test('merges template directories', () {
       final module = createModule(
-        files: [
-          file(
-            'files/main.dart',
-            'lib/main.dart',
-          ),
-          file(
-            'files/app.dart',
-            'lib/app.dart',
-          ),
-        ],
+        templateDir: 'templates/modules/architecture/clean',
       );
 
       final result = merger.merge([module]);
 
       expect(
-        result.files.length,
-        2,
+        result.templateDirectories,
+        contains('templates/modules/architecture/clean'),
       );
     });
 
@@ -135,17 +125,20 @@ void main() {
       final module1 = createModule(
         folders: ['lib/core'],
         packages: [pkg('dio')],
+        templateDir: 'templates/modules/architecture/clean',
       );
 
       final module2 = createModule(
         folders: ['lib/features'],
         packages: [pkg('flutter_riverpod')],
+        templateDir: 'templates/modules/state_management/riverpod',
       );
 
       final result = merger.merge([module1, module2]);
 
       expect(result.folders.length, 2);
       expect(result.packages.length, 2);
+      expect(result.templateDirectories.length, 2);
     });
 
     test('returns empty project when no modules provided', () {
@@ -153,7 +146,7 @@ void main() {
 
       expect(result.folders, isEmpty);
       expect(result.packages, isEmpty);
-      expect(result.files, isEmpty);
+      expect(result.templateDirectories, isEmpty);
     });
 
     test('throws on conflicting modules', () async {});
@@ -175,14 +168,14 @@ TemplateModule createModule({
   String category = 'general',
   List<String> folders = const [],
   List<TemplatePackage> packages = const [],
-  List<TemplateFile> files = const [],
+  String? templateDir,
 }) {
   return TemplateModule(
     name: name,
     category: category,
     folders: folders,
     packages: packages,
-    files: files,
+    templateDir: templateDir,
   );
 }
 
@@ -193,15 +186,5 @@ TemplatePackage pkg(
   return TemplatePackage(
     name: name,
     dev: dev,
-  );
-}
-
-TemplateFile file(
-  String from,
-  String to,
-) {
-  return TemplateFile(
-    sourcePath: from,
-    to: to,
   );
 }

@@ -10,8 +10,6 @@ packages:
   - name: flutter_bloc
   - name: bloc
 
-files: []
-
 requires: []
 conflicts:
   - riverpod
