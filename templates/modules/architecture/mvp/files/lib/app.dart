@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Arise App',
+      title: '{{app_name}}',
       theme: ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true),
       home: const Scaffold(body: Center(child: Text('Welcome to Arise 🚀'))),
     );

@@ -9,7 +9,13 @@ class TemplateService {
     required MergedTemplate template,
     Map<String, String> customVariables = const {},
   }) async {
+    final projectName = Directory(
+      projectPath,
+    ).uri.pathSegments.where((s) => s.isNotEmpty).last;
+
     final allVariables = {
+      'project_name': projectName,
+      'app_name': projectName,
       ...template.variables,
       ...customVariables,
     };
@@ -21,10 +27,7 @@ class TemplateService {
     }
   }
 
-  Future<void> _createFolders(
-    String projectPath,
-    List<String> folders,
-  ) async {
+  Future<void> _createFolders(String projectPath, List<String> folders) async {
     for (final folder in folders) {
       await Directory('$projectPath/$folder').create(recursive: true);
     }
@@ -41,16 +44,6 @@ class TemplateService {
       return;
     }
 
-    await copyDirectory(
-      source,
-      Directory(projectPath),
-      render: (content) async {
-        var rendered = content;
-        variables.forEach((key, value) {
-          rendered = rendered.replaceAll('{{$key}}', value);
-        });
-        return rendered;
-      },
-    );
+    await copyDirectory(source, Directory(projectPath), variables: variables);
   }
 }
