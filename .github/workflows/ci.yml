@@ -2,12 +2,27 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+      - develop/v1.1.0
+    paths-ignore:
+      - "**.md"
+      - "doc/**"
+
   pull_request:
-    branches: [master]
+    branches:
+      - master
+      - develop/v1.1.0
+    paths-ignore:
+      - "**.md"
+      - "doc/**"
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
