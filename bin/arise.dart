@@ -1,11 +1,14 @@
 import 'dart:io';
 
-import 'package:arise/arise.dart' as arise;
+import 'package:args/command_runner.dart';
+import 'package:arise/arise.dart';
 
 Future<void> main(List<String> arguments) async {
-  final exitCode = await arise.AriseCommandRunner().run(arguments);
-
-  if (exitCode != null) {
-    exit(exitCode);
+  try {
+    final exitCode = await AriseCommandRunner().run(arguments);
+    exit(exitCode ?? 0);
+  } on UsageException catch (error) {
+    stderr.writeln(error);
+    exit(64);
   }
 }
