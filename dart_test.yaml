@@ -1,10 +1,3 @@
-paths:
-  - test/services/
-  - test/commands/
-  - test/models/
-  - test/validators/
-  - test/integration/
-
 coverage:
   exclude:
     - "**/*.g.dart"
