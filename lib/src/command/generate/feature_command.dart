@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:args/command_runner.dart';
+import 'package:arise/src/services/manifest_service.dart';
+import 'package:arise/src/utils/feature_name.dart';
 
 class FeatureCommand extends Command<int> {
   @override
@@ -15,9 +19,31 @@ class FeatureCommand extends Command<int> {
       usageException('A feature name is required.');
     }
 
-    final featureName = arguments.first;
+    final featureName = FeatureName.normalize(arguments.first);
 
-    print('Generating feature: $featureName');
+    if (!FeatureName.isValid(featureName)) {
+      stderr.writeln(
+        'Invalid feature name "${arguments.first}". '
+        'Use lowercase letters, numbers, underscores, or hyphens.',
+      );
+      return 64;
+    }
+
+    final projectPath = Directory.current.path;
+
+    final manifest = await ManifestService().read(projectPath);
+
+    if (manifest == null) {
+      stderr.writeln('No Arise project found.');
+      stderr.writeln(
+        'Run this command from the root of a project created with Arise.',
+      );
+      return 1;
+    }
+
+    stdout.writeln(
+      'Generating feature "$featureName" using ${manifest.architecture} architecture...',
+    );
 
     return 0;
   }
