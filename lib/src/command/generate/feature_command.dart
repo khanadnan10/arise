@@ -61,10 +61,15 @@ class FeatureCommand extends Command<int> {
     );
 
     if (!File(templatePath).existsSync()) {
+      final available = ArisePaths.featureTemplates(manifest.architecture);
       stderr.writeln(
         'Template "$templateName" not found for ${manifest.architecture} architecture.',
       );
-      stderr.writeln('Available: minimal');
+      stderr.writeln(
+        available.isEmpty
+            ? 'No templates available for this architecture.'
+            : 'Available: ${available.join(', ')}',
+      );
       return 1;
     }
 

@@ -53,4 +53,21 @@ class ArisePaths {
   ]) {
     return '$packageRoot/templates/modules/feature/$architecture/$template/config.yaml';
   }
+
+  /// Lists available template names for a given architecture by reading
+  /// the template directory on disk — never hardcoded.
+  static List<String> featureTemplates(String architecture) {
+    final root = Directory(
+      '$packageRoot/templates/modules/feature/$architecture',
+    );
+
+    if (!root.existsSync()) return [];
+
+    return root
+        .listSync()
+        .whereType<Directory>()
+        .map((d) => d.uri.pathSegments.where((s) => s.isNotEmpty).last)
+        .toList()
+      ..sort();
+  }
 }
