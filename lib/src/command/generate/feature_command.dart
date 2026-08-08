@@ -9,6 +9,15 @@ import 'package:arise/src/utils/arise_paths.dart';
 import 'package:arise/src/utils/feature_name.dart';
 
 class FeatureCommand extends Command<int> {
+  FeatureCommand() {
+    argParser.addOption(
+      'template',
+      abbr: 't',
+      help: 'Feature template to use.',
+      defaultsTo: 'minimal',
+    );
+  }
+
   @override
   String get name => 'feature';
 
@@ -33,6 +42,7 @@ class FeatureCommand extends Command<int> {
       return 64;
     }
 
+    final templateName = argResults!['template'] as String;
     final projectPath = Directory.current.path;
 
     final manifest = await ManifestService().read(projectPath);
@@ -45,16 +55,26 @@ class FeatureCommand extends Command<int> {
       return 1;
     }
 
-    stdout.writeln(
-      'Generating feature "$featureName" '
-      'using ${manifest.architecture} architecture...',
+    final templatePath = ArisePaths.featureTemplate(
+      manifest.architecture,
+      templateName,
     );
 
-    // Load and merge the feature template for this architecture.
-    final registry = TemplateRegistry();
-    final modules = await registry.loadModules(
-      paths: [ArisePaths.featureTemplate(manifest.architecture)],
+    if (!File(templatePath).existsSync()) {
+      stderr.writeln(
+        'Template "$templateName" not found for ${manifest.architecture} architecture.',
+      );
+      stderr.writeln('Available: minimal');
+      return 1;
+    }
+
+    stdout.writeln(
+      'Generating feature "$featureName" '
+      'using ${manifest.architecture}/$templateName...',
     );
+
+    final registry = TemplateRegistry();
+    final modules = await registry.loadModules(paths: [templatePath]);
 
     final merged = TemplateMerger().merge(modules);
 

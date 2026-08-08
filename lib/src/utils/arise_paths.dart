@@ -47,7 +47,10 @@ class ArisePaths {
   }
 
   /// Absolute path to a feature config.yaml.
-  static String featureTemplate(String architecture) {
-    return '$packageRoot/templates/modules/feature/$architecture/config.yaml';
+  static String featureTemplate(
+    String architecture, [
+    String template = 'minimal',
+  ]) {
+    return '$packageRoot/templates/modules/feature/$architecture/$template/config.yaml';
   }
 }

@@ -40,7 +40,7 @@ void main() {
 
     test('creates expected directory structure for auth feature', () async {
       final module = await TemplateLoader().load(
-        ArisePaths.featureTemplate('clean'),
+        ArisePaths.featureTemplate('clean', 'minimal'),
       );
       final merged = TemplateMerger().merge([module]);
 
@@ -59,7 +59,7 @@ void main() {
 
     test('feature_name variable substitutes correctly in path', () async {
       final module = await TemplateLoader().load(
-        ArisePaths.featureTemplate('clean'),
+        ArisePaths.featureTemplate('clean', 'minimal'),
       );
       final merged = TemplateMerger().merge([module]);
 
@@ -81,7 +81,7 @@ void main() {
       final service = TemplateService();
 
       for (final feature in ['auth', 'home', 'settings']) {
-        final module = await loader.load(ArisePaths.featureTemplate('clean'));
+        final module = await loader.load(ArisePaths.featureTemplate('clean', 'minimal'));
         final merged = merger.merge([module]);
         await service.generate(
           projectPath: projectPath,
