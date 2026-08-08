@@ -92,14 +92,8 @@ void main() {
         );
       }
 
-      expect(
-        Directory('$projectPath/lib/features/auth').existsSync(),
-        isTrue,
-      );
-      expect(
-        Directory('$projectPath/lib/features/home').existsSync(),
-        isTrue,
-      );
+      expect(Directory('$projectPath/lib/features/auth').existsSync(), isTrue);
+      expect(Directory('$projectPath/lib/features/home').existsSync(), isTrue);
       expect(
         Directory('$projectPath/lib/features/settings').existsSync(),
         isTrue,
@@ -132,7 +126,9 @@ void main() {
     });
 
     test('no .arise.yaml returns null from ManifestService', () async {
-      final emptyDir = await Directory.systemTemp.createTemp('arise_no_manifest_');
+      final emptyDir = await Directory.systemTemp.createTemp(
+        'arise_no_manifest_',
+      );
       addTearDown(() => emptyDir.delete(recursive: true));
 
       final manifest = await ManifestService().read(emptyDir.path);
@@ -151,9 +147,8 @@ void main() {
 
     test('missing template variant throws for unknown template name', () async {
       expect(
-        () => TemplateLoader().load(
-          ArisePaths.featureTemplate('clean', 'full'),
-        ),
+        () =>
+            TemplateLoader().load(ArisePaths.featureTemplate('clean', 'full')),
         throwsException,
       );
     });
