@@ -45,4 +45,9 @@ class ArisePaths {
   static String networkingTemplate(String name) {
     return '$packageRoot/templates/modules/networking/$name/config.yaml';
   }
+
+  /// Absolute path to a feature config.yaml.
+  static String featureTemplate(String architecture) {
+    return '$packageRoot/templates/modules/feature/$architecture/config.yaml';
+  }
 }

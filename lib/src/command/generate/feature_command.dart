@@ -2,6 +2,10 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:arise/src/services/manifest_service.dart';
+import 'package:arise/src/services/template_loader.dart';
+import 'package:arise/src/services/template_merger.dart';
+import 'package:arise/src/services/template_service.dart';
+import 'package:arise/src/utils/arise_paths.dart';
 import 'package:arise/src/utils/feature_name.dart';
 
 class FeatureCommand extends Command<int> {
@@ -42,8 +46,24 @@ class FeatureCommand extends Command<int> {
     }
 
     stdout.writeln(
-      'Generating feature "$featureName" using ${manifest.architecture} architecture...',
+      'Generating feature "$featureName" '
+      'using ${manifest.architecture} architecture...',
     );
+
+    // Load and merge the feature template for this architecture.
+    final module = await TemplateLoader().load(
+      ArisePaths.featureTemplate(manifest.architecture),
+    );
+
+    final merged = TemplateMerger().merge([module]);
+
+    await TemplateService().generate(
+      projectPath: projectPath,
+      template: merged,
+      customVariables: {'feature_name': featureName},
+    );
+
+    stdout.writeln('✅ Feature "$featureName" created.');
 
     return 0;
   }

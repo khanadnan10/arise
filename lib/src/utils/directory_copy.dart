@@ -10,10 +10,12 @@ Future<void> copyDirectory(
   }
 
   await for (final entity in source.list()) {
-    final name = entity.uri.pathSegments
+    final rawName = entity.uri.pathSegments
         .where((segment) => segment.isNotEmpty)
         .last;
 
+    // Render variables in the file/directory name itself.
+    final name = _renderString(rawName, variables);
     final destinationPath = '${destination.path}/$name';
 
     if (entity is Directory) {
@@ -26,6 +28,14 @@ Future<void> copyDirectory(
       await _copyFile(entity, File(destinationPath), variables);
     }
   }
+}
+
+String _renderString(String input, Map<String, String> variables) {
+  var result = input;
+  for (final entry in variables.entries) {
+    result = result.replaceAll('{{${entry.key}}}', entry.value);
+  }
+  return result;
 }
 
 Future<void> _copyFile(
