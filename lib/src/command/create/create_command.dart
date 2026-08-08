@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:arise/src/models/create_config.dart';
+import 'package:arise/src/models/project_manifest.dart';
 import 'package:arise/src/models/template_hook.dart';
 import 'package:arise/src/services/hook_service.dart';
 import 'package:arise/src/services/manifest_service.dart';
@@ -56,6 +57,7 @@ class CreateCommand extends Command<int> {
     stdout.writeln('Architecture: ${config.architecture.label}');
     stdout.writeln('State Management: ${config.stateManagement.label}');
     stdout.writeln('Routing: ${config.routing.label}');
+    stdout.writeln('Networking: ${config.networking.label}');
 
     await _createFlutterProject(projectName);
 
@@ -106,11 +108,14 @@ class CreateCommand extends Command<int> {
     final manifestService = ManifestService();
     await manifestService.save(
       projectPath: projectName,
-      architecture: config.architecture.name,
-      modules: [
-        if (config.stateManagement.name != 'none') config.stateManagement.name,
-        if (config.routing.templateName != 'none') config.routing.templateName,
-      ],
+      manifest: ProjectManifest(
+        version: 1,
+        projectName: projectName,
+        architecture: config.architecture.name,
+        stateManagement: config.stateManagement.name,
+        routing: config.routing.templateName,
+        networking: config.networking.templateName,
+      ),
     );
 
     stdout.writeln();
@@ -126,6 +131,8 @@ class CreateCommand extends Command<int> {
         ArisePaths.stateManagementTemplate(config.stateManagement.name),
       if (config.routing.templateName != 'none')
         ArisePaths.routingTemplate(config.routing.templateName),
+      if (config.networking.templateName != 'none')
+        ArisePaths.networkingTemplate(config.networking.templateName),
     ];
   }
 

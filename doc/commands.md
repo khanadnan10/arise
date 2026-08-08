@@ -26,7 +26,12 @@ Creates a new Flutter project.
 arise create
 ```
 
-The interactive setup asks for the project name and available project configuration options.
+The interactive setup asks for the project name and available project configuration options:
+
+- Architecture (Clean, MVVM, MVC, MVP, or default Flutter)
+- State management (Riverpod, Provider, Bloc, GetX, or none)
+- Routing (GoRouter, AutoRoute, or none)
+- Networking (Dio, or none)
 
 ### Skip interactive setup
 
@@ -44,15 +49,74 @@ arise create --help
 
 ---
 
-## `arise generate`
+## `arise generate feature`
 
-Generates resources inside a project.
+Generates a feature scaffold inside an existing Arise project.
+
+Run this command from the **project root** (where `.arise.yaml` exists).
 
 ```bash
-arise generate --help
+arise generate feature auth
 ```
 
-Available generators are shown by the CLI.
+Arise reads `.arise.yaml` to determine the project architecture and generates the matching layer structure under `lib/features/<name>/`.
+
+**Clean Architecture output:**
+
+```text
+lib/features/auth/
+├── data/
+├── domain/
+└── presentation/
+```
+
+**MVVM output:**
+
+```text
+lib/features/auth/
+├── model/
+├── view/
+└── viewmodel/
+```
+
+**MVC output:**
+
+```text
+lib/features/auth/
+├── controller/
+├── model/
+└── view/
+```
+
+**MVP output:**
+
+```text
+lib/features/auth/
+├── model/
+├── presenter/
+└── view/
+```
+
+### Template selection
+
+The default template is `minimal`. Use `--template` to select an alternative when available:
+
+```bash
+arise generate feature auth --template minimal
+```
+
+### Feature name rules
+
+- Must start with a lowercase letter.
+- May contain lowercase letters, digits, and underscores.
+- Hyphens are automatically converted to underscores (`user-profile` → `user_profile`).
+- Uppercase input is automatically lowercased (`Auth` → `auth`).
+
+### Help
+
+```bash
+arise generate feature --help
+```
 
 ---
 
@@ -64,5 +128,6 @@ Arise uses standard process exit codes:
 | --- | --- |
 | `0` | Command completed successfully |
 | `1` | Command failed |
+| `64` | Invalid command-line usage |
 
 This allows Arise commands to be used in scripts and CI pipelines.

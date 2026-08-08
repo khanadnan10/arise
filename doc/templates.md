@@ -186,6 +186,43 @@ Networking modules live under:
 templates/modules/networking/
 ```
 
+## Feature Templates
+
+Feature templates live under:
+
+```text
+templates/modules/feature/<architecture>/<template>/
+```
+
+For example:
+
+```text
+templates/modules/feature/clean/minimal/
+├── config.yaml
+└── files/
+    └── lib/
+        └── features/
+            └── {{feature_name}}/
+                ├── data/
+                │   └── .gitkeep
+                ├── domain/
+                │   └── .gitkeep
+                └── presentation/
+                    └── .gitkeep
+```
+
+The `{{feature_name}}` placeholder is substituted in **both file contents and
+directory names** at generation time.
+
+Available feature templates in v1.1:
+
+| Architecture | Template | Layers |
+| --- | --- | --- |
+| `clean` | `minimal` | `data/` `domain/` `presentation/` |
+| `mvvm` | `minimal` | `model/` `view/` `viewmodel/` |
+| `mvc` | `minimal` | `model/` `view/` `controller/` |
+| `mvp` | `minimal` | `model/` `view/` `presenter/` |
+
 ## Template Rules
 
 When adding or modifying templates:
