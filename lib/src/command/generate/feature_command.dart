@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:arise/src/services/manifest_service.dart';
-import 'package:arise/src/services/template_loader.dart';
 import 'package:arise/src/services/template_merger.dart';
+import 'package:arise/src/services/template_registry.dart';
 import 'package:arise/src/services/template_service.dart';
 import 'package:arise/src/utils/arise_paths.dart';
 import 'package:arise/src/utils/feature_name.dart';
@@ -51,11 +51,12 @@ class FeatureCommand extends Command<int> {
     );
 
     // Load and merge the feature template for this architecture.
-    final module = await TemplateLoader().load(
-      ArisePaths.featureTemplate(manifest.architecture),
+    final registry = TemplateRegistry();
+    final modules = await registry.loadModules(
+      paths: [ArisePaths.featureTemplate(manifest.architecture)],
     );
 
-    final merged = TemplateMerger().merge([module]);
+    final merged = TemplateMerger().merge(modules);
 
     await TemplateService().generate(
       projectPath: projectPath,
@@ -63,7 +64,7 @@ class FeatureCommand extends Command<int> {
       customVariables: {'feature_name': featureName},
     );
 
-    stdout.writeln('✅ Feature "$featureName" created.');
+    stdout.writeln('✅ Feature "$featureName" generated.');
 
     return 0;
   }
