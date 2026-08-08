@@ -81,7 +81,9 @@ void main() {
       final service = TemplateService();
 
       for (final feature in ['auth', 'home', 'settings']) {
-        final module = await loader.load(ArisePaths.featureTemplate('clean', 'minimal'));
+        final module = await loader.load(
+          ArisePaths.featureTemplate('clean', 'minimal'),
+        );
         final merged = merger.merge([module]);
         await service.generate(
           projectPath: projectPath,
@@ -103,5 +105,104 @@ void main() {
         isTrue,
       );
     });
+
+    test('duplicate feature generation is idempotent', () async {
+      final loader = TemplateLoader();
+      final merger = TemplateMerger();
+      final service = TemplateService();
+
+      // Generate the same feature twice — second run must not throw.
+      for (var i = 0; i < 2; i++) {
+        final module = await loader.load(
+          ArisePaths.featureTemplate('clean', 'minimal'),
+        );
+        final merged = merger.merge([module]);
+        await service.generate(
+          projectPath: projectPath,
+          template: merged,
+          customVariables: {'feature_name': 'auth'},
+        );
+      }
+
+      // Directories must still exist after both runs.
+      final featureRoot = '$projectPath/lib/features/auth';
+      expect(Directory('$featureRoot/data').existsSync(), isTrue);
+      expect(Directory('$featureRoot/domain').existsSync(), isTrue);
+      expect(Directory('$featureRoot/presentation').existsSync(), isTrue);
+    });
+
+    test('no .arise.yaml returns null from ManifestService', () async {
+      final emptyDir = await Directory.systemTemp.createTemp('arise_no_manifest_');
+      addTearDown(() => emptyDir.delete(recursive: true));
+
+      final manifest = await ManifestService().read(emptyDir.path);
+
+      expect(manifest, isNull);
+    });
+
+    test('missing template throws for unsupported architecture', () async {
+      expect(
+        () => TemplateLoader().load(
+          ArisePaths.featureTemplate('viper', 'minimal'),
+        ),
+        throwsException,
+      );
+    });
+
+    test('missing template variant throws for unknown template name', () async {
+      expect(
+        () => TemplateLoader().load(
+          ArisePaths.featureTemplate('clean', 'full'),
+        ),
+        throwsException,
+      );
+    });
+  });
+
+  group('generate feature — per architecture', () {
+    late Directory tempDir;
+
+    setUp(() async {
+      tempDir = await Directory.systemTemp.createTemp('arise_arch_feature_');
+    });
+
+    tearDown(() async {
+      if (await tempDir.exists()) {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
+    for (final arch in ['mvvm', 'mvc', 'mvp']) {
+      test('$arch minimal template generates expected layers', () async {
+        final module = await TemplateLoader().load(
+          ArisePaths.featureTemplate(arch, 'minimal'),
+        );
+        final merged = TemplateMerger().merge([module]);
+
+        await TemplateService().generate(
+          projectPath: tempDir.path,
+          template: merged,
+          customVariables: {'feature_name': 'auth'},
+        );
+
+        final featureRoot = '${tempDir.path}/lib/features/auth';
+        expect(Directory(featureRoot).existsSync(), isTrue);
+
+        final expectedLayers = switch (arch) {
+          'mvvm' => ['model', 'view', 'viewmodel'],
+          'mvc' => ['model', 'view', 'controller'],
+          'mvp' => ['model', 'view', 'presenter'],
+          _ => <String>[],
+        };
+
+        for (final layer in expectedLayers) {
+          expect(
+            Directory('$featureRoot/$layer').existsSync(),
+            isTrue,
+            reason: '$arch feature missing $layer/',
+          );
+        }
+      });
+    }
   });
 }
