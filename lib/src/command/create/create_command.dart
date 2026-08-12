@@ -120,6 +120,12 @@ class CreateCommand extends Command<int> {
 
     stdout.writeln();
     stdout.writeln('✅ Project "$projectName" generated successfully!');
+    stdout.writeln();
+    stdout.writeln('💡 Next: cd $projectName');
+    stdout.writeln(
+      '   Then run: arise generate feature <name>  '
+      'to scaffold your first feature.',
+    );
 
     return 0;
   }

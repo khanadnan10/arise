@@ -22,6 +22,12 @@ class FeatureCommand extends Command<int> {
       help: 'Overwrite existing feature directory.',
       negatable: false,
     );
+    argParser.addFlag(
+      'list',
+      abbr: 'l',
+      help: 'List available architectures and templates.',
+      negatable: false,
+    );
   }
 
   @override
@@ -32,6 +38,12 @@ class FeatureCommand extends Command<int> {
 
   @override
   Future<int> run() async {
+    final list = argResults!['list'] as bool;
+
+    if (list) {
+      return _runList();
+    }
+
     final arguments = argResults?.rest ?? [];
 
     if (arguments.isEmpty) {
@@ -106,6 +118,37 @@ class FeatureCommand extends Command<int> {
     );
 
     stdout.writeln('✅ Feature "$featureName" generated.');
+
+    return 0;
+  }
+
+  Future<int> _runList() async {
+    final architectures = ArisePaths.featureArchitectures();
+
+    if (architectures.isEmpty) {
+      stdout.writeln('No feature templates found.');
+      return 0;
+    }
+
+    final manifest = await ManifestService().read(Directory.current.path);
+
+    stdout.writeln('Available feature templates:\n');
+
+    for (final arch in architectures) {
+      final templates = ArisePaths.featureTemplates(arch);
+      final isCurrent = manifest?.architecture == arch;
+      final marker = isCurrent ? '  ← current project' : '';
+      stdout.writeln('  $arch$marker');
+      for (final tmpl in templates) {
+        stdout.writeln('    • $tmpl');
+      }
+    }
+
+    if (manifest == null) {
+      stdout.writeln(
+        '\nRun from an Arise project root to see which architecture is active.',
+      );
+    }
 
     return 0;
   }

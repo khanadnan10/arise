@@ -16,11 +16,13 @@ Future<ProcessResult> _runFeature(
   List<String> args, {
   required String workingDirectory,
 }) {
-  return Process.run(
-    'dart',
-    ['run', '$_ariseRoot/bin/arise.dart', 'generate', 'feature', ...args],
-    workingDirectory: workingDirectory,
-  );
+  return Process.run('dart', [
+    'run',
+    '$_ariseRoot/bin/arise.dart',
+    'generate',
+    'feature',
+    ...args,
+  ], workingDirectory: workingDirectory);
 }
 
 /// Seeds a minimal `.arise.yaml` so the command sees an Arise project.
@@ -67,46 +69,39 @@ void main() {
     });
 
     test('path traversal (../auth) → exit 64 with message', () async {
-      final result = await _runFeature(
-        ['../auth'],
-        workingDirectory: tempDir.path,
-      );
+      final result = await _runFeature([
+        '../auth',
+      ], workingDirectory: tempDir.path);
       expect(result.exitCode, 64);
       expect(result.stderr, contains('Invalid feature name'));
     });
 
     test('starts with digit (2fa) → exit 64 with message', () async {
-      final result = await _runFeature(
-        ['2fa'],
-        workingDirectory: tempDir.path,
-      );
+      final result = await _runFeature(['2fa'], workingDirectory: tempDir.path);
       expect(result.exitCode, 64);
       expect(result.stderr, contains('Invalid feature name'));
     });
 
     test('special characters (@auth) → exit 64 with message', () async {
-      final result = await _runFeature(
-        ['@auth'],
-        workingDirectory: tempDir.path,
-      );
+      final result = await _runFeature([
+        '@auth',
+      ], workingDirectory: tempDir.path);
       expect(result.exitCode, 64);
       expect(result.stderr, contains('Invalid feature name'));
     });
 
     test('slash in name (auth/foo) → exit 64 with message', () async {
-      final result = await _runFeature(
-        ['auth/foo'],
-        workingDirectory: tempDir.path,
-      );
+      final result = await _runFeature([
+        'auth/foo',
+      ], workingDirectory: tempDir.path);
       expect(result.exitCode, 64);
       expect(result.stderr, contains('Invalid feature name'));
     });
 
     test('space in name (auth feature) → exit 64 with message', () async {
-      final result = await _runFeature(
-        ['auth feature'],
-        workingDirectory: tempDir.path,
-      );
+      final result = await _runFeature([
+        'auth feature',
+      ], workingDirectory: tempDir.path);
       expect(result.exitCode, 64);
       expect(result.stderr, contains('Invalid feature name'));
     });
@@ -128,10 +123,9 @@ void main() {
     });
 
     test('uppercase input (Auth) → generates auth/', () async {
-      final result = await _runFeature(
-        ['Auth'],
-        workingDirectory: tempDir.path,
-      );
+      final result = await _runFeature([
+        'Auth',
+      ], workingDirectory: tempDir.path);
       expect(result.exitCode, 0, reason: result.stderr.toString());
       expect(
         Directory('${tempDir.path}/lib/features/auth').existsSync(),
@@ -140,10 +134,9 @@ void main() {
     });
 
     test('hyphenated input (user-profile) → generates user_profile/', () async {
-      final result = await _runFeature(
-        ['user-profile'],
-        workingDirectory: tempDir.path,
-      );
+      final result = await _runFeature([
+        'user-profile',
+      ], workingDirectory: tempDir.path);
       expect(result.exitCode, 0, reason: result.stderr.toString());
       expect(
         Directory('${tempDir.path}/lib/features/user_profile').existsSync(),
@@ -151,17 +144,19 @@ void main() {
       );
     });
 
-    test('mixed case hyphen (User-Profile) → generates user_profile/', () async {
-      final result = await _runFeature(
-        ['User-Profile'],
-        workingDirectory: tempDir.path,
-      );
-      expect(result.exitCode, 0, reason: result.stderr.toString());
-      expect(
-        Directory('${tempDir.path}/lib/features/user_profile').existsSync(),
-        isTrue,
-      );
-    });
+    test(
+      'mixed case hyphen (User-Profile) → generates user_profile/',
+      () async {
+        final result = await _runFeature([
+          'User-Profile',
+        ], workingDirectory: tempDir.path);
+        expect(result.exitCode, 0, reason: result.stderr.toString());
+        expect(
+          Directory('${tempDir.path}/lib/features/user_profile').existsSync(),
+          isTrue,
+        );
+      },
+    );
   });
 
   // -------------------------------------------------------------------------
@@ -172,10 +167,7 @@ void main() {
       final dir = await Directory.systemTemp.createTemp('arise_no_manifest_');
       addTearDown(() => dir.delete(recursive: true));
 
-      final result = await _runFeature(
-        ['auth'],
-        workingDirectory: dir.path,
-      );
+      final result = await _runFeature(['auth'], workingDirectory: dir.path);
       expect(result.exitCode, 1);
       expect(result.stderr, contains('No Arise project found'));
       expect(result.stderr, contains('created with Arise'));
@@ -196,30 +188,35 @@ void main() {
       if (await tempDir.exists()) await tempDir.delete(recursive: true);
     });
 
-    test('unsupported architecture → exit 1 with "not found" message', () async {
-      await _seedManifest(tempDir.path, architecture: 'viper');
+    test(
+      'unsupported architecture → exit 1 with "not found" message',
+      () async {
+        await _seedManifest(tempDir.path, architecture: 'viper');
 
-      final result = await _runFeature(
-        ['auth'],
-        workingDirectory: tempDir.path,
-      );
-      expect(result.exitCode, 1);
-      expect(result.stderr, contains('not found'));
-    });
+        final result = await _runFeature([
+          'auth',
+        ], workingDirectory: tempDir.path);
+        expect(result.exitCode, 1);
+        expect(result.stderr, contains('not found'));
+      },
+    );
 
-    test('unknown --template value → exit 1, lists available templates',
-        () async {
-      await _seedManifest(tempDir.path);
+    test(
+      'unknown --template value → exit 1, lists available templates',
+      () async {
+        await _seedManifest(tempDir.path);
 
-      final result = await _runFeature(
-        ['auth', '--template', 'full'],
-        workingDirectory: tempDir.path,
-      );
-      expect(result.exitCode, 1);
-      expect(result.stderr, contains('not found'));
-      expect(result.stderr, contains('Available:'));
-      expect(result.stderr, contains('minimal'));
-    });
+        final result = await _runFeature([
+          'auth',
+          '--template',
+          'full',
+        ], workingDirectory: tempDir.path);
+        expect(result.exitCode, 1);
+        expect(result.stderr, contains('not found'));
+        expect(result.stderr, contains('Available:'));
+        expect(result.stderr, contains('minimal'));
+      },
+    );
   });
 
   // -------------------------------------------------------------------------
@@ -238,10 +235,9 @@ void main() {
     });
 
     test('generates clean feature with data / domain / presentation', () async {
-      final result = await _runFeature(
-        ['auth'],
-        workingDirectory: tempDir.path,
-      );
+      final result = await _runFeature([
+        'auth',
+      ], workingDirectory: tempDir.path);
 
       expect(result.exitCode, 0, reason: result.stderr.toString());
       expect(result.stdout, contains('✅'));
@@ -253,10 +249,11 @@ void main() {
     });
 
     test('explicit --template minimal behaves same as default', () async {
-      final result = await _runFeature(
-        ['auth', '--template', 'minimal'],
-        workingDirectory: tempDir.path,
-      );
+      final result = await _runFeature([
+        'auth',
+        '--template',
+        'minimal',
+      ], workingDirectory: tempDir.path);
       expect(result.exitCode, 0, reason: result.stderr.toString());
       expect(
         Directory('${tempDir.path}/lib/features/auth').existsSync(),
@@ -265,27 +262,22 @@ void main() {
     });
 
     test('output includes architecture name and template name', () async {
-      final result = await _runFeature(
-        ['auth'],
-        workingDirectory: tempDir.path,
-      );
+      final result = await _runFeature([
+        'auth',
+      ], workingDirectory: tempDir.path);
       expect(result.stdout, contains('clean'));
       expect(result.stdout, contains('minimal'));
     });
 
     test('second run on same feature name → exit 1 (already exists)', () async {
       // First run — should succeed.
-      final first = await _runFeature(
-        ['auth'],
-        workingDirectory: tempDir.path,
-      );
+      final first = await _runFeature(['auth'], workingDirectory: tempDir.path);
       expect(first.exitCode, 0, reason: first.stderr.toString());
 
       // Second run without --force — should be rejected.
-      final second = await _runFeature(
-        ['auth'],
-        workingDirectory: tempDir.path,
-      );
+      final second = await _runFeature([
+        'auth',
+      ], workingDirectory: tempDir.path);
       expect(second.exitCode, 1);
       expect(second.stderr, contains('already exists'));
       expect(second.stderr, contains('--force'));
@@ -293,17 +285,14 @@ void main() {
 
     test('second run with --force → exit 0 (overwrite allowed)', () async {
       // First run.
-      final first = await _runFeature(
-        ['auth'],
-        workingDirectory: tempDir.path,
-      );
+      final first = await _runFeature(['auth'], workingDirectory: tempDir.path);
       expect(first.exitCode, 0, reason: first.stderr.toString());
 
       // Second run with --force — should succeed.
-      final second = await _runFeature(
-        ['auth', '--force'],
-        workingDirectory: tempDir.path,
-      );
+      final second = await _runFeature([
+        'auth',
+        '--force',
+      ], workingDirectory: tempDir.path);
       expect(second.exitCode, 0, reason: second.stderr.toString());
       expect(
         Directory('${tempDir.path}/lib/features/auth').existsSync(),
@@ -317,18 +306,15 @@ void main() {
         addTearDown(() => dir.delete(recursive: true));
         await _seedManifest(dir.path, architecture: arch);
 
-        final result = await _runFeature(
-          ['auth'],
-          workingDirectory: dir.path,
-        );
+        final result = await _runFeature(['auth'], workingDirectory: dir.path);
         expect(result.exitCode, 0, reason: result.stderr.toString());
 
         final featureRoot = '${dir.path}/lib/features/auth';
         final expectedLayers = switch (arch) {
           'mvvm' => ['model', 'view', 'viewmodel'],
-          'mvc'  => ['model', 'view', 'controller'],
-          'mvp'  => ['model', 'view', 'presenter'],
-          _      => <String>[],
+          'mvc' => ['model', 'view', 'controller'],
+          'mvp' => ['model', 'view', 'presenter'],
+          _ => <String>[],
         };
 
         for (final layer in expectedLayers) {
@@ -340,5 +326,69 @@ void main() {
         }
       });
     }
+  });
+
+  // -------------------------------------------------------------------------
+  // --list flag
+  // -------------------------------------------------------------------------
+  group('FeatureCommand — --list flag', () {
+    test('lists all available architectures and templates', () async {
+      final dir = await Directory.systemTemp.createTemp('arise_list_');
+      addTearDown(() => dir.delete(recursive: true));
+
+      final result = await _runFeature(['--list'], workingDirectory: dir.path);
+
+      expect(result.exitCode, 0, reason: result.stderr.toString());
+      // All four architectures must appear
+      for (final arch in ['clean', 'mvvm', 'mvc', 'mvp']) {
+        expect(result.stdout, contains(arch));
+      }
+      // minimal template must appear
+      expect(result.stdout, contains('minimal'));
+    });
+
+    test('marks current project architecture with arrow', () async {
+      final dir = await Directory.systemTemp.createTemp('arise_list_arch_');
+      addTearDown(() => dir.delete(recursive: true));
+      await _seedManifest(dir.path, architecture: 'mvvm');
+
+      final result = await _runFeature(['--list'], workingDirectory: dir.path);
+
+      expect(result.exitCode, 0, reason: result.stderr.toString());
+      expect(result.stdout, contains('mvvm'));
+      expect(result.stdout, contains('current project'));
+    });
+
+    test('shows hint when run outside an Arise project', () async {
+      final dir = await Directory.systemTemp.createTemp(
+        'arise_list_no_manifest_',
+      );
+      addTearDown(() => dir.delete(recursive: true));
+
+      final result = await _runFeature(['--list'], workingDirectory: dir.path);
+
+      expect(result.exitCode, 0);
+      expect(result.stdout, contains('Arise project root'));
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // arise generate --help improvement
+  // -------------------------------------------------------------------------
+  group('GenerateCommand — help text', () {
+    test('--help includes example usage', () async {
+      final dir = await Directory.systemTemp.createTemp('arise_help_');
+      addTearDown(() => dir.delete(recursive: true));
+
+      final result = await Process.run('dart', [
+        'run',
+        '$_ariseRoot/bin/arise.dart',
+        'generate',
+        '--help',
+      ], workingDirectory: dir.path);
+
+      expect(result.exitCode, 0);
+      expect(result.stdout, contains('arise generate feature auth'));
+    });
   });
 }

@@ -70,4 +70,19 @@ class ArisePaths {
         .toList()
       ..sort();
   }
+
+  /// Lists available feature architectures by reading the template
+  /// directory on disk — never hardcoded.
+  static List<String> featureArchitectures() {
+    final root = Directory('$packageRoot/templates/modules/feature');
+
+    if (!root.existsSync()) return [];
+
+    return root
+        .listSync()
+        .whereType<Directory>()
+        .map((d) => d.uri.pathSegments.where((s) => s.isNotEmpty).last)
+        .toList()
+      ..sort();
+  }
 }
