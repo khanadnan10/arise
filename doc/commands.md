@@ -105,6 +105,8 @@ The default template is `minimal`. Use `--template` to select an alternative whe
 arise generate feature auth --template minimal
 ```
 
+> **Note:** Only the `minimal` template is available in v1.1. Additional templates (`standard`, `full`) are planned for future releases.
+
 ### Overwrite protection
 
 If a feature directory already exists, Arise will not overwrite it:

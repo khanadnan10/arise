@@ -174,6 +174,8 @@ Use `--template` to select an alternative variant when available (default: `mini
 arise generate feature auth --template minimal
 ```
 
+> **Note:** Only the `minimal` template is available in v1.1. Additional templates (`standard`, `full`) are planned for future releases.
+
 See all options:
 
 ```bash
