@@ -100,7 +100,7 @@ void main() {
       );
     });
 
-    test('duplicate feature generation is idempotent', () async {
+    test('duplicate generation is idempotent at the service level', () async {
       final loader = TemplateLoader();
       final merger = TemplateMerger();
       final service = TemplateService();

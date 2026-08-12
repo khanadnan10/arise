@@ -273,14 +273,42 @@ void main() {
       expect(result.stdout, contains('minimal'));
     });
 
-    test('second run on same feature name is idempotent (exit 0)', () async {
-      for (var i = 0; i < 2; i++) {
-        final result = await _runFeature(
-          ['auth'],
-          workingDirectory: tempDir.path,
-        );
-        expect(result.exitCode, 0, reason: 'Run ${i + 1} failed');
-      }
+    test('second run on same feature name → exit 1 (already exists)', () async {
+      // First run — should succeed.
+      final first = await _runFeature(
+        ['auth'],
+        workingDirectory: tempDir.path,
+      );
+      expect(first.exitCode, 0, reason: first.stderr.toString());
+
+      // Second run without --force — should be rejected.
+      final second = await _runFeature(
+        ['auth'],
+        workingDirectory: tempDir.path,
+      );
+      expect(second.exitCode, 1);
+      expect(second.stderr, contains('already exists'));
+      expect(second.stderr, contains('--force'));
+    });
+
+    test('second run with --force → exit 0 (overwrite allowed)', () async {
+      // First run.
+      final first = await _runFeature(
+        ['auth'],
+        workingDirectory: tempDir.path,
+      );
+      expect(first.exitCode, 0, reason: first.stderr.toString());
+
+      // Second run with --force — should succeed.
+      final second = await _runFeature(
+        ['auth', '--force'],
+        workingDirectory: tempDir.path,
+      );
+      expect(second.exitCode, 0, reason: second.stderr.toString());
+      expect(
+        Directory('${tempDir.path}/lib/features/auth').existsSync(),
+        isTrue,
+      );
     });
 
     for (final arch in ['mvvm', 'mvc', 'mvp']) {

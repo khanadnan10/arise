@@ -16,6 +16,12 @@ class FeatureCommand extends Command<int> {
       help: 'Feature template to use.',
       defaultsTo: 'minimal',
     );
+    argParser.addFlag(
+      'force',
+      abbr: 'f',
+      help: 'Overwrite existing feature directory.',
+      negatable: false,
+    );
   }
 
   @override
@@ -43,6 +49,7 @@ class FeatureCommand extends Command<int> {
     }
 
     final templateName = argResults!['template'] as String;
+    final force = argResults!['force'] as bool;
     final projectPath = Directory.current.path;
 
     final manifest = await ManifestService().read(projectPath);
@@ -52,6 +59,15 @@ class FeatureCommand extends Command<int> {
       stderr.writeln(
         'Run this command from the root of a project created with Arise.',
       );
+      return 1;
+    }
+
+    final featureDir = Directory('$projectPath/lib/features/$featureName');
+    if (!force && featureDir.existsSync()) {
+      stderr.writeln(
+        'Feature "$featureName" already exists at lib/features/$featureName.',
+      );
+      stderr.writeln('Use --force to overwrite.');
       return 1;
     }
 
