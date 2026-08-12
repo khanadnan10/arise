@@ -10,6 +10,7 @@ All notable changes to Arise will be documented in this file.
 - Architecture-aware feature templates: Clean Architecture, MVVM, MVC, MVP
 - `--template` flag for `generate feature` (default: `minimal`)
 - `--force` flag to overwrite an existing feature directory
+- `--list` flag to view available architectures and templates
 - Overwrite protection — duplicate feature generation is rejected unless `--force` is passed
 - Feature name validation — normalises hyphens/uppercase, rejects unsafe names
 - Project manifest (`.arise.yaml`) — persists architecture and module choices

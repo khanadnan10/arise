@@ -130,6 +130,29 @@ arise generate feature auth --force
 - Hyphens are automatically converted to underscores (`user-profile` → `user_profile`).
 - Uppercase input is automatically lowercased (`Auth` → `auth`).
 
+### Listing available templates
+
+List all supported feature architectures and template variants:
+
+```bash
+arise generate feature --list
+```
+
+When run inside an Arise project, it highlights your project's current architecture:
+
+```text
+Available feature templates:
+
+  clean  ← current project
+    • minimal
+  mvc
+    • minimal
+  mvp
+    • minimal
+  mvvm
+    • minimal
+```
+
 ### Help
 
 ```bash

@@ -176,6 +176,12 @@ arise generate feature auth --template minimal
 
 > **Note:** Only the `minimal` template is available in v1.1. Additional templates (`standard`, `full`) are planned for future releases.
 
+List available feature templates and highlight active project architecture:
+
+```bash
+arise generate feature --list
+```
+
 See all options:
 
 ```bash
