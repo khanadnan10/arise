@@ -105,6 +105,22 @@ The default template is `minimal`. Use `--template` to select an alternative whe
 arise generate feature auth --template minimal
 ```
 
+### Overwrite protection
+
+If a feature directory already exists, Arise will not overwrite it:
+
+```bash
+arise generate feature auth
+# Feature "auth" already exists at lib/features/auth.
+# Use --force to overwrite.
+```
+
+To regenerate an existing feature:
+
+```bash
+arise generate feature auth --force
+```
+
 ### Feature name rules
 
 - Must start with a lowercase letter.

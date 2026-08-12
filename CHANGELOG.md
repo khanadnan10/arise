@@ -9,12 +9,14 @@ All notable changes to Arise will be documented in this file.
 - `arise generate feature <name>` — generates a feature scaffold using the project's architecture
 - Architecture-aware feature templates: Clean Architecture, MVVM, MVC, MVP
 - `--template` flag for `generate feature` (default: `minimal`)
-- Feature name validation — normalizes hyphens/uppercase, rejects unsafe names
+- `--force` flag to overwrite an existing feature directory
+- Overwrite protection — duplicate feature generation is rejected unless `--force` is passed
+- Feature name validation — normalises hyphens/uppercase, rejects unsafe names
 - Project manifest (`.arise.yaml`) — persists architecture and module choices
 - `ProjectManifest` typed model — replaces raw `Map<String, dynamic>` in `ManifestService`
 - Networking selection in `arise create` (`Dio` or none)
 - Exit code `64` for invalid CLI usage (replaces stack traces)
-- Integration tests for feature generation across all four architectures
+- Integration and command-level tests for feature generation across all four architectures
 
 ---
 
