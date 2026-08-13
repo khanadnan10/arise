@@ -8,8 +8,8 @@ enum Routing {
   final String label;
 
   String get templateName => switch (this) {
-    Routing.goRouter => 'go_router',
-    Routing.autoRoute => 'auto_route',
-    Routing.none => 'none',
-  };
+        Routing.goRouter => 'go_router',
+        Routing.autoRoute => 'auto_route',
+        Routing.none => 'none',
+      };
 }

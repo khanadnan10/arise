@@ -10,9 +10,8 @@ Future<void> copyDirectory(
   }
 
   await for (final entity in source.list()) {
-    final rawName = entity.uri.pathSegments
-        .where((segment) => segment.isNotEmpty)
-        .last;
+    final rawName =
+        entity.uri.pathSegments.where((segment) => segment.isNotEmpty).last;
 
     // Render variables in the file/directory name itself.
     final name = _renderString(rawName, variables);

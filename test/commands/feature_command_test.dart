@@ -16,13 +16,16 @@ Future<ProcessResult> _runFeature(
   List<String> args, {
   required String workingDirectory,
 }) {
-  return Process.run('dart', [
-    'run',
-    '$_ariseRoot/bin/arise.dart',
-    'generate',
-    'feature',
-    ...args,
-  ], workingDirectory: workingDirectory);
+  return Process.run(
+      'dart',
+      [
+        'run',
+        '$_ariseRoot/bin/arise.dart',
+        'generate',
+        'feature',
+        ...args,
+      ],
+      workingDirectory: workingDirectory);
 }
 
 /// Seeds a minimal `.arise.yaml` so the command sees an Arise project.
@@ -380,12 +383,15 @@ void main() {
       final dir = await Directory.systemTemp.createTemp('arise_help_');
       addTearDown(() => dir.delete(recursive: true));
 
-      final result = await Process.run('dart', [
-        'run',
-        '$_ariseRoot/bin/arise.dart',
-        'generate',
-        '--help',
-      ], workingDirectory: dir.path);
+      final result = await Process.run(
+          'dart',
+          [
+            'run',
+            '$_ariseRoot/bin/arise.dart',
+            'generate',
+            '--help',
+          ],
+          workingDirectory: dir.path);
 
       expect(result.exitCode, 0);
       expect(result.stdout, contains('arise generate feature auth'));

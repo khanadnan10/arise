@@ -4,7 +4,7 @@ import 'package:arise/src/command/generate/generate_command.dart';
 
 class AriseCommandRunner extends CommandRunner<int> {
   AriseCommandRunner()
-    : super('arise', 'A CLI to bootstrap and manage Flutter projects.') {
+      : super('arise', 'A CLI to bootstrap and manage Flutter projects.') {
     addCommand(CreateCommand());
     addCommand(GenerateCommand());
   }

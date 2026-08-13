@@ -50,10 +50,13 @@ void main() {
 
       try {
         // 1. Create a real Flutter project.
-        final createResult = await Process.run('flutter', [
-          'create',
-          projectName,
-        ], workingDirectory: tempDirectory.path);
+        final createResult = await Process.run(
+            'flutter',
+            [
+              'create',
+              projectName,
+            ],
+            workingDirectory: tempDirectory.path);
 
         expect(
           createResult.exitCode,
@@ -84,10 +87,13 @@ void main() {
         );
 
         // 4. Install packages declared by the modules.
-        final pubGet = await Process.run('flutter', [
-          'pub',
-          'get',
-        ], workingDirectory: projectPath);
+        final pubGet = await Process.run(
+            'flutter',
+            [
+              'pub',
+              'get',
+            ],
+            workingDirectory: projectPath);
 
         expect(
           pubGet.exitCode,
@@ -96,9 +102,12 @@ void main() {
         );
 
         // 5. Verify the generated project is clean.
-        final analyze = await Process.run('flutter', [
-          'analyze',
-        ], workingDirectory: projectPath);
+        final analyze = await Process.run(
+            'flutter',
+            [
+              'analyze',
+            ],
+            workingDirectory: projectPath);
 
         expect(
           analyze.exitCode,
@@ -107,9 +116,12 @@ void main() {
         );
 
         // 6. Verify all tests pass.
-        final flutterTest = await Process.run('flutter', [
-          'test',
-        ], workingDirectory: projectPath);
+        final flutterTest = await Process.run(
+            'flutter',
+            [
+              'test',
+            ],
+            workingDirectory: projectPath);
 
         expect(
           flutterTest.exitCode,
