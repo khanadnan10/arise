@@ -1,6 +1,6 @@
 name: arise
 description: A modular CLI for bootstrapping production-ready Flutter projects with architecture, state management, routing, and networking.
-version: 1.0.0
+version: 1.1.0
 repository: https://github.com/khanadnan10/arise
 homepage: https://github.com/khanadnan10/arise
 issue_tracker: https://github.com/khanadnan10/arise/issues
