@@ -54,12 +54,7 @@ void main() {
             analyzeResult.exitCode,
             0,
             reason:
-                '''
-$architecture: flutter analyze failed
-
-${analyzeResult.stdout}
-${analyzeResult.stderr}
-''',
+                '$architecture: flutter analyze failed\n${analyzeResult.stdout}\n${analyzeResult.stderr}',
           );
 
           // 4. Verify all tests pass.
@@ -71,12 +66,7 @@ ${analyzeResult.stderr}
             testResult.exitCode,
             0,
             reason:
-                '''
-$architecture: flutter test failed
-
-${testResult.stdout}
-${testResult.stderr}
-''',
+                '$architecture: flutter test failed\n${testResult.stdout}\n${testResult.stderr}',
           );
         } finally {
           if (await tempDirectory.exists()) {

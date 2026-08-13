@@ -27,13 +27,7 @@ void main() {
         expect(
           result.exitCode,
           0,
-          reason:
-              '''
-Arise failed:
-
-${result.stdout}
-${result.stderr}
-''',
+          reason: 'Arise failed:\n${result.stdout}\n${result.stderr}',
         );
 
         expect(Directory(projectPath).existsSync(), isTrue);
@@ -50,12 +44,7 @@ ${result.stderr}
           analyze.exitCode,
           0,
           reason:
-              '''
-flutter analyze failed:
-
-${analyze.stdout}
-${analyze.stderr}
-''',
+              'flutter analyze failed:\n${analyze.stdout}\n${analyze.stderr}',
         );
 
         final tests = await Process.run('flutter', [
@@ -65,13 +54,7 @@ ${analyze.stderr}
         expect(
           tests.exitCode,
           0,
-          reason:
-              '''
-flutter test failed:
-
-${tests.stdout}
-${tests.stderr}
-''',
+          reason: 'flutter test failed:\n${tests.stdout}\n${tests.stderr}',
         );
       } finally {
         if (await tempDirectory.exists()) {
