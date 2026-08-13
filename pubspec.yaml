@@ -12,7 +12,7 @@ topics:
   - scaffolding
   - dart
 environment:
-  sdk: ^3.9.2
+  sdk: '>=3.3.0 <4.0.0'
 
 executables:
   arise: arise

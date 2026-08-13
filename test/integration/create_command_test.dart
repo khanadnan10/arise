@@ -16,46 +16,33 @@ void main() {
       try {
         final ariseRoot = Directory.current.path;
 
-        final result = await Process.run('dart', [
-          'run',
-          '$ariseRoot/bin/arise.dart',
-          'create',
-          '--skip',
-          projectName,
-        ], workingDirectory: tempDirectory.path);
-
-        expect(
-          result.exitCode,
-          0,
-          reason: 'Arise failed:\n${result.stdout}\n${result.stderr}',
+        final result = await Process.run(
+          'dart',
+          ['run', '$ariseRoot/bin/arise.dart', 'create', '--skip', projectName],
+          workingDirectory: tempDirectory.path,
         );
+
+        expect(result.exitCode, 0, reason: result.stderr.toString());
 
         expect(Directory(projectPath).existsSync(), isTrue);
-
         expect(File('$projectPath/pubspec.yaml').existsSync(), isTrue);
-
         expect(File('$projectPath/lib/main.dart').existsSync(), isTrue);
 
-        final analyze = await Process.run('flutter', [
-          'analyze',
-        ], workingDirectory: projectPath);
-
-        expect(
-          analyze.exitCode,
-          0,
-          reason:
-              'flutter analyze failed:\n${analyze.stdout}\n${analyze.stderr}',
+        final analyze = await Process.run(
+          'flutter',
+          ['analyze'],
+          workingDirectory: projectPath,
         );
 
-        final tests = await Process.run('flutter', [
-          'test',
-        ], workingDirectory: projectPath);
+        expect(analyze.exitCode, 0, reason: analyze.stderr.toString());
 
-        expect(
-          tests.exitCode,
-          0,
-          reason: 'flutter test failed:\n${tests.stdout}\n${tests.stderr}',
+        final tests = await Process.run(
+          'flutter',
+          ['test'],
+          workingDirectory: projectPath,
         );
+
+        expect(tests.exitCode, 0, reason: tests.stderr.toString());
       } finally {
         if (await tempDirectory.exists()) {
           await tempDirectory.delete(recursive: true);
