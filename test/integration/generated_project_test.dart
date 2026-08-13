@@ -22,10 +22,11 @@ void main() {
 
         try {
           // 1. Create a real Flutter project.
-          final createResult = await Process.run('flutter', [
-            'create',
-            projectName,
-          ], workingDirectory: tempDirectory.path);
+          final createResult = await Process.run(
+            'flutter',
+            ['create', projectName],
+            workingDirectory: tempDirectory.path,
+          );
 
           expect(
             createResult.exitCode,
@@ -46,37 +47,29 @@ void main() {
           );
 
           // 3. Verify the generated project is clean.
-          final analyzeResult = await Process.run('flutter', [
-            'analyze',
-          ], workingDirectory: projectPath);
+          final analyzeResult = await Process.run(
+            'flutter',
+            ['analyze'],
+            workingDirectory: projectPath,
+          );
 
           expect(
             analyzeResult.exitCode,
             0,
-            reason:
-                '''
-$architecture: flutter analyze failed
-
-${analyzeResult.stdout}
-${analyzeResult.stderr}
-''',
+            reason: analyzeResult.stderr.toString(),
           );
 
           // 4. Verify all tests pass.
-          final testResult = await Process.run('flutter', [
-            'test',
-          ], workingDirectory: projectPath);
+          final testResult = await Process.run(
+            'flutter',
+            ['test'],
+            workingDirectory: projectPath,
+          );
 
           expect(
             testResult.exitCode,
             0,
-            reason:
-                '''
-$architecture: flutter test failed
-
-${testResult.stdout}
-${testResult.stderr}
-''',
+            reason: testResult.stderr.toString(),
           );
         } finally {
           if (await tempDirectory.exists()) {

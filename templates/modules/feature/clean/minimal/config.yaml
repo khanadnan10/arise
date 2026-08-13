@@ -1,0 +1,16 @@
+name: Clean Feature
+
+category: feature
+
+version: 1.0.0
+
+variables:
+  feature_name: ""
+
+folders: []
+
+packages: []
+
+requires: []
+
+conflicts: []

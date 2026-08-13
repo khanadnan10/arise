@@ -1,4 +1,5 @@
 import 'package:arise/src/models/architecture.dart';
+import 'package:arise/src/models/networking.dart';
 import 'package:arise/src/models/routing.dart';
 import 'package:arise/src/models/state_management.dart';
 
@@ -17,8 +18,10 @@ class CreateWizard {
         architecture: Architecture.none,
         stateManagement: StateManagement.none,
         routing: Routing.none,
+        networking: Networking.none,
       );
     }
+
     final name = Prompt.ask('Project name');
 
     final architecture = Prompt.select(
@@ -36,12 +39,18 @@ class CreateWizard {
       Routing.values,
       (routing) => routing.label,
     );
+    final networking = Prompt.select(
+      'Select Networking',
+      Networking.values,
+      (networking) => networking.label,
+    );
 
     return CreateConfig(
       projectName: name,
       architecture: architecture,
       stateManagement: stateManagement,
       routing: routing,
+      networking: networking,
     );
   }
 }

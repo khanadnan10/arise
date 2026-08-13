@@ -16,12 +16,10 @@ With Arise, you can:
 
 - Create Flutter projects through an interactive CLI
 - Choose your preferred project architecture
-- Configure state management
-- Configure routing
-- Add networking and local storage
-- Generate architecture-aware project structures
+- Configure state management, routing, networking
+- Generate architecture-aware feature scaffolds inside existing projects
 - Skip configuration when you just need a standard Flutter project
-- Keep project configuration available for future Arise commands
+- Keep project configuration in `.arise.yaml` for future Arise commands
 
 ## Quick Start
 
@@ -127,15 +125,68 @@ Use the command help for all available options:
 arise create --help
 ```
 
-### `arise generate`
+### `arise generate feature`
 
-Generates resources inside an Arise project.
+Generates a feature scaffold inside an existing Arise project.
+
+Run from the **project root** (where `.arise.yaml` exists):
 
 ```bash
-arise generate --help
+arise generate feature auth
 ```
 
-Use the command help to see the currently available generators.
+Arise reads `.arise.yaml` to determine the architecture and creates the matching layer structure:
+
+```text
+# Clean Architecture
+lib/features/auth/
+├── data/
+├── domain/
+└── presentation/
+
+# MVVM
+lib/features/auth/
+├── model/
+├── view/
+└── viewmodel/
+```
+
+Feature names are normalised automatically:
+
+```bash
+arise generate feature User-Profile
+# → creates lib/features/user_profile/
+```
+
+If the feature directory already exists, Arise refuses to overwrite it by default:
+
+```bash
+arise generate feature auth
+# Feature "auth" already exists at lib/features/auth.
+# Use --force to overwrite.
+
+arise generate feature auth --force   # explicit overwrite
+```
+
+Use `--template` to select an alternative variant when available (default: `minimal`):
+
+```bash
+arise generate feature auth --template minimal
+```
+
+> **Note:** Only the `minimal` template is available in v1.1. Additional templates (`standard`, `full`) are planned for future releases.
+
+List available feature templates and highlight active project architecture:
+
+```bash
+arise generate feature --list
+```
+
+See all options:
+
+```bash
+arise generate feature --help
+```
 
 ## Global Help
 
@@ -179,7 +230,16 @@ templates/
     ├── architecture/
     ├── state_management/
     ├── routing/
-    └── networking/
+    ├── networking/
+    └── feature/
+        ├── clean/
+        │   └── minimal/
+        ├── mvvm/
+        │   └── minimal/
+        ├── mvc/
+        │   └── minimal/
+        └── mvp/
+            └── minimal/
 ```
 
 A module contains its configuration and, when required, files that are copied into the generated project:
