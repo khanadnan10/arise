@@ -1,0 +1,10 @@
+name: Bloc Feature Overlay
+category: feature_state
+version: 1.0.0
+variables:
+  feature_name: ""
+  state_layer: presentation
+folders: []
+packages: []
+requires: []
+conflicts: []

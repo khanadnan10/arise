@@ -6,4 +6,11 @@ enum Networking {
 
   final String label;
   final String templateName;
+
+  static Networking fromName(String name) {
+    return Networking.values.firstWhere(
+      (n) => n.templateName == name || n.name == name,
+      orElse: () => throw ArgumentError('Unknown networking: $name'),
+    );
+  }
 }

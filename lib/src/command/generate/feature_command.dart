@@ -14,7 +14,7 @@ class FeatureCommand extends Command<int> {
       'template',
       abbr: 't',
       help: 'Feature template to use.',
-      defaultsTo: 'minimal',
+      defaultsTo: 'standard',
     );
     argParser.addFlag(
       'force',
@@ -48,6 +48,12 @@ class FeatureCommand extends Command<int> {
 
     if (arguments.isEmpty) {
       usageException('A feature name is required.');
+    }
+
+    if (arguments.length > 1) {
+      usageException(
+        'Unexpected argument(s): ${arguments.skip(1).join(' ')}.',
+      );
     }
 
     final featureName = FeatureName.normalize(arguments.first);
@@ -101,26 +107,53 @@ class FeatureCommand extends Command<int> {
       return 1;
     }
 
+    final stateTemplatePath =
+        (templateName != 'minimal' && manifest.stateManagement != 'none')
+            ? ArisePaths.featureStateTemplate(manifest.stateManagement)
+            : null;
+    final hasStateOverlay =
+        stateTemplatePath != null && File(stateTemplatePath).existsSync();
+
+    final stateSuffix = hasStateOverlay ? ' + ${manifest.stateManagement}' : '';
+
     stdout.writeln(
       'Generating feature "$featureName" '
-      'using ${manifest.architecture}/$templateName...',
+      'using ${manifest.architecture}/$templateName$stateSuffix...',
     );
 
     final registry = TemplateRegistry();
-    final modules = await registry.loadModules(paths: [templatePath]);
+    final modules = await registry.loadModules(
+      paths: [
+        templatePath,
+        if (hasStateOverlay) stateTemplatePath,
+      ],
+    );
 
     final merged = TemplateMerger().merge(modules);
 
     await TemplateService().generate(
       projectPath: projectPath,
       template: merged,
-      customVariables: {'feature_name': featureName},
+      customVariables: {
+        if (manifest.projectName.isNotEmpty)
+          'project_name': manifest.projectName,
+        'feature_name': featureName,
+        'state_layer': _stateLayerForArchitecture(manifest.architecture),
+      },
     );
 
     stdout.writeln('✅ Feature "$featureName" generated.');
 
     return 0;
   }
+
+  String _stateLayerForArchitecture(String architecture) =>
+      switch (architecture) {
+        'mvvm' => 'viewmodel',
+        'mvc' => 'controller',
+        'mvp' => 'presenter',
+        _ => 'presentation',
+      };
 
   Future<int> _runList() async {
     final architectures = ArisePaths.featureArchitectures();

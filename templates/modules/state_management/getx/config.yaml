@@ -4,7 +4,8 @@ description: High-performance state management, navigation, and dependency injec
 version: 1.0.0
 author: Arise
 
-folders: []
+folders:
+  - lib/core/controllers
 
 packages:
   - name: get
@@ -14,3 +15,7 @@ conflicts:
   - riverpod
   - provider
   - bloc
+
+variables:
+  app_imports: "import 'package:get/get.dart';\n"
+  app_body: "GetMaterialApp(\n      debugShowCheckedModeBanner: false,\n      title: '{{app_name}}',\n      theme: ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true),\n      home: const Scaffold(body: Center(child: Text('Welcome to Arise 🚀'))),\n    )"

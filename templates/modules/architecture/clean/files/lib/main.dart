@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+{{state_imports}}{{di_imports}}import 'app.dart';
 
-import 'app.dart';
-
-void main() {
-  runApp(const App());
+Future<void> main() async {
+{{di_setup}}{{state_setup}}  runApp({{main_root}});
 }

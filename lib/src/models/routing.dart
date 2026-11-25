@@ -12,4 +12,11 @@ enum Routing {
         Routing.autoRoute => 'auto_route',
         Routing.none => 'none',
       };
+
+  static Routing fromName(String name) {
+    return Routing.values.firstWhere(
+      (r) => r.templateName == name || r.name == name,
+      orElse: () => throw ArgumentError('Unknown routing: $name'),
+    );
+  }
 }

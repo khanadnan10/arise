@@ -214,14 +214,18 @@ templates/modules/feature/clean/minimal/
 The `{{feature_name}}` placeholder is substituted in **both file contents and
 directory names** at generation time.
 
-Available feature templates in v1.1:
+Available feature templates in v1.2:
 
-| Architecture | Template | Layers |
+| Architecture | Templates | Layers |
 | --- | --- | --- |
-| `clean` | `minimal` | `data/` `domain/` `presentation/` |
-| `mvvm` | `minimal` | `model/` `view/` `viewmodel/` |
-| `mvc` | `minimal` | `model/` `view/` `controller/` |
-| `mvp` | `minimal` | `model/` `view/` `presenter/` |
+| `clean` | `minimal`, `standard`, `full` | `data/` `domain/` `presentation/` |
+| `mvvm` | `minimal`, `standard`, `full` | `model/` `view/` `viewmodel/` |
+| `mvc` | `minimal`, `standard`, `full` | `model/` `view/` `controller/` |
+| `mvp` | `minimal`, `standard`, `full` | `model/` `view/` `presenter/` |
+
+Case-aware template variables (`*_pascal`, `*_camel`, `*_title`) are derived automatically for `project_name` and `feature_name`.
+
+State-management feature overlays live under `templates/modules/feature_state/` (`riverpod`, `bloc`, `provider`, `getx`) and are merged automatically for `standard` and `full` feature templates when `state_management` is enabled in `.arise.yaml`.
 
 ## Template Rules
 

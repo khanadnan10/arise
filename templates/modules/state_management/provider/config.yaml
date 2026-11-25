@@ -4,7 +4,8 @@ description: Simple and flexible state management using InheritedWidget.
 version: 1.0.0
 author: Arise
 
-folders: []
+folders:
+  - lib/core/providers
 
 packages:
   - name: provider
@@ -14,3 +15,7 @@ conflicts:
   - riverpod
   - bloc
   - getx
+
+variables:
+  state_imports: "import 'core/providers/app_state.dart';\n"
+  main_root: "withAppProviders(child: const App())"

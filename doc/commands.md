@@ -33,6 +33,24 @@ The interactive setup asks for the project name and available project configurat
 - Routing (GoRouter, AutoRoute, or none)
 - Networking (Dio, or none)
 
+### Non-interactive flags
+
+You can configure a project directly via flags without interactive prompts:
+
+```bash
+arise create my_app --arch clean --state riverpod --route go_router --network dio
+```
+
+Available flags:
+
+- `--arch` / `-a`: `clean`, `mvvm`, `mvc`, `mvp`, `none`
+- `--state`: `riverpod`, `provider`, `bloc`, `getx`, `none`
+- `--route` / `-r`: `go_router`, `auto_route`, `none`
+- `--network` / `-n`: `dio`, `none`
+- `--di`: `get_it`, `injectable`, `none`
+- `--storage`: `shared_preferences`, `none`
+- `--lint`: `very_good_analysis`, `none`
+
 ### Skip interactive setup
 
 ```bash
@@ -49,7 +67,7 @@ arise create --help
 
 ---
 
-## `arise generate feature`
+## `arise generate feature` (alias: `arise gen feature`)
 
 Generates a feature scaffold inside an existing Arise project.
 
@@ -57,6 +75,7 @@ Run this command from the **project root** (where `.arise.yaml` exists).
 
 ```bash
 arise generate feature auth
+arise gen feature auth
 ```
 
 Arise reads `.arise.yaml` to determine the project architecture and generates the matching layer structure under `lib/features/<name>/`.
@@ -99,13 +118,17 @@ lib/features/auth/
 
 ### Template selection
 
-The default template is `minimal`. Use `--template` to select an alternative when available:
+The default template is `standard`. Use `--template` (or `-t`) to choose `minimal`, `standard`, or `full`:
 
 ```bash
-arise generate feature auth --template minimal
+arise gen feature auth -t minimal
+arise gen feature auth -t standard
+arise gen feature auth -t full
 ```
 
-> **Note:** Only the `minimal` template is available in v1.1. Additional templates (`standard`, `full`) are planned for future releases.
+- `minimal` — creates the architecture's layer directories with `.gitkeep`
+- `standard` — generates core starter Dart classes for each layer (plus state-management files when configured in `.arise.yaml`)
+- `full` — includes everything in `standard` plus models, data sources/services, widgets, and starter unit tests
 
 ### Overwrite protection
 
@@ -157,6 +180,43 @@ Available feature templates:
 
 ```bash
 arise generate feature --help
+```
+
+---
+
+## `arise add`
+
+Adds a built-in Arise module or any `pub.dev` package to the current project:
+
+- If the argument matches a built-in Arise module, Arise checks for conflicts, generates the module's files, installs its dependencies, runs hooks, and updates `.arise.yaml`.
+- Otherwise, Arise falls back to `flutter pub add` in the background (supporting `--dev` / `-d` and multiple packages) and updates `pubspec.yaml` without modifying `.arise.yaml`.
+
+```bash
+arise add dio
+arise add get_it
+arise add intl
+arise add --dev mockito
+arise add --list
+```
+
+---
+
+## `arise info`
+
+Displays the configuration stored in `.arise.yaml` and lists features detected under `lib/features/`:
+
+```bash
+arise info
+```
+
+---
+
+## `arise doctor`
+
+Verifies Dart SDK, Flutter SDK, Arise template availability, and `.arise.yaml` validity:
+
+```bash
+arise doctor
 ```
 
 ---

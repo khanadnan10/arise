@@ -4,7 +4,8 @@ description: Predictable state management using the BLoC design pattern.
 version: 1.0.0
 author: Arise
 
-folders: []
+folders:
+  - lib/core/bloc
 
 packages:
   - name: flutter_bloc
@@ -15,3 +16,7 @@ conflicts:
   - riverpod
   - provider
   - getx
+
+variables:
+  state_imports: "import 'package:flutter_bloc/flutter_bloc.dart';\nimport 'core/bloc/app_bloc_observer.dart';\n"
+  state_setup: "  Bloc.observer = const AppBlocObserver();\n"

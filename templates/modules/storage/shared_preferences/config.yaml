@@ -1,0 +1,14 @@
+name: SharedPreferences
+category: storage
+description: Persistent key-value storage for simple local data.
+version: 1.0.0
+author: Arise
+
+folders:
+  - lib/core/storage
+
+packages:
+  - name: shared_preferences
+
+requires: []
+conflicts: []

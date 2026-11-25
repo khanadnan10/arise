@@ -98,7 +98,43 @@ void main() {
       expect(result.templateDirectories, isEmpty);
     });
 
-    test('throws on conflicting modules', () async {});
+    test('throws on conflicting modules', () {
+      final module1 = createModule(
+        name: 'GoRouter',
+        conflicts: ['auto_route'],
+        templateDir: 'templates/modules/routing/go_router',
+      );
+      final module2 = createModule(
+        name: 'AutoRoute',
+        conflicts: ['go_router'],
+        templateDir: 'templates/modules/routing/auto_route',
+      );
+
+      expect(() => merger.merge([module1, module2]), throwsStateError);
+    });
+
+    test('throws when required module is missing', () {
+      final module = createModule(
+        name: 'Feature',
+        requires: ['dio'],
+      );
+
+      expect(() => merger.merge([module]), throwsStateError);
+    });
+
+    test('succeeds when required module is present', () {
+      final dio = createModule(
+        name: 'Dio',
+        templateDir: 'templates/modules/networking/dio',
+      );
+      final feature = createModule(
+        name: 'Feature',
+        requires: ['dio'],
+      );
+
+      final result = merger.merge([dio, feature]);
+      expect(result.templateDirectories.length, 1);
+    });
 
     test('throws on duplicate output files', () async {});
 
@@ -117,6 +153,8 @@ TemplateModule createModule({
   String category = 'general',
   List<String> folders = const [],
   List<TemplatePackage> packages = const [],
+  List<String> requires = const [],
+  List<String> conflicts = const [],
   String? templateDir,
 }) {
   return TemplateModule(
@@ -124,6 +162,8 @@ TemplateModule createModule({
     category: category,
     folders: folders,
     packages: packages,
+    requires: requires,
+    conflicts: conflicts,
     templateDir: templateDir,
   );
 }

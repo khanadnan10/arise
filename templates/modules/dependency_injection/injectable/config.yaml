@@ -1,0 +1,33 @@
+name: Injectable
+category: dependency_injection
+description: Code-generated dependency injection built on top of get_it.
+version: 1.0.0
+author: Arise
+
+folders:
+  - lib/core/di
+
+packages:
+  - name: get_it
+  - name: injectable
+  - name: injectable_generator
+    dev: true
+  - name: build_runner
+    dev: true
+
+hooks:
+  - phase: postPubGet
+    command: dart
+    args:
+      - run
+      - build_runner
+      - build
+      - --delete-conflicting-outputs
+
+requires: []
+conflicts:
+  - get_it
+
+variables:
+  di_imports: "import 'core/di/injection.dart';\n"
+  di_setup: "  await configureDependencies();\n"

@@ -14,12 +14,12 @@ Arise handles the repetitive setup while keeping the generated project transpare
 
 With Arise, you can:
 
-- Create Flutter projects through an interactive CLI
-- Choose your preferred project architecture
-- Configure state management, routing, networking
-- Generate architecture-aware feature scaffolds inside existing projects
-- Skip configuration when you just need a standard Flutter project
-- Keep project configuration in `.arise.yaml` for future Arise commands
+- Bootstrap Flutter projects interactively or with non-interactive CLI flags
+- Wire architecture, state management, routing, networking, DI, storage, and linting out of the box
+- Generate architecture- and state-aware feature scaffolds (`minimal`, `standard`, `full`)
+- Add built-in Arise modules or any `pub.dev` package with `arise add`
+- Inspect project configuration (`arise info`) and verify environment health (`arise doctor`)
+- Persist project choices in `.arise.yaml` for future Arise commands
 
 ## Quick Start
 
@@ -31,28 +31,15 @@ dart pub global activate arise
 
 ## Supported Setup
 
-### Architecture
-- Clean Architecture
-- MVVM
-- MVC
-- MVP
-- None
-
-### State Management
-- Riverpod
-- Provider
-- Bloc
-- GetX
-- None
-
-### Routing
-- GoRouter
-- AutoRoute
-- None
-
-### Networking
-- Dio
-- None
+| Category | Options |
+| --- | --- |
+| **Architecture** | Clean Architecture (`clean`), MVVM (`mvvm`), MVC (`mvc`), MVP (`mvp`), `none` |
+| **State Management** | Riverpod (`riverpod`), Provider (`provider`), Bloc (`bloc`), GetX (`getx`), `none` |
+| **Routing** | GoRouter (`go_router`), AutoRoute (`auto_route`), `none` |
+| **Networking** | Dio (`dio`), `none` |
+| **Dependency Injection** | GetIt (`get_it`), Injectable (`injectable`), `none` |
+| **Local Storage** | SharedPreferences (`shared_preferences`), `none` |
+| **Linting** | Very Good Analysis (`very_good_analysis`), `none` |
 
 ## Interactive Setup
 
@@ -105,87 +92,97 @@ This skips the interactive configuration and creates a standard Flutter project.
 
 ### `arise create`
 
-Creates a new Flutter project.
+Creates a new Flutter project, generates the chosen folder structure and starter wiring (`lib/main.dart`, `lib/app.dart`, `lib/core/...`), installs all dependencies, runs codegen hooks (such as `build_runner`), and saves `.arise.yaml`.
+
+**Interactive mode:**
 
 ```bash
 arise create
 ```
 
-Starts the interactive project setup.
+**Non-interactive mode (great for scripts/CI):**
 
-You can also skip the configuration:
+```bash
+arise create my_app \
+  --arch clean \
+  --state riverpod \
+  --route go_router \
+  --network dio \
+  --di get_it \
+  --storage shared_preferences \
+  --lint very_good_analysis
+```
+
+**Default Flutter project (skip Arise modules):**
 
 ```bash
 arise create --skip my_app
 ```
 
-Use the command help for all available options:
+See all options with `arise create --help`.
+
+---
+
+### `arise generate feature` (shorthand: `arise gen feature`)
+
+Scaffolds a new feature inside an existing Arise project (run from the project root where `.arise.yaml` lives).
 
 ```bash
-arise create --help
+arise gen feature auth            # standard (default)
+arise gen feature auth -t minimal  # empty layer folders only
+arise gen feature auth -t full     # complete feature + unit test
 ```
 
-### `arise generate feature`
+What each `--template` (`-t`) generates (example for **Clean Architecture**):
 
-Generates a feature scaffold inside an existing Arise project.
+| Template | What You Get |
+| --- | --- |
+| `-t minimal` | Empty architecture layer folders (`data/`, `domain/`, `presentation/`) with `.gitkeep` |
+| `-t standard` *(default)* | Starter Dart classes per layer (Entity, Repository contract & impl, Page) + state-management files if configured in `.arise.yaml` (e.g. `AuthNotifier`, `AuthBloc`, `AuthProvider`, `AuthController`) |
+| `-t full` | Everything in `standard` **plus** Data Model (`fromJson`/`toJson`), Remote DataSource, UseCase, reusable Widget, and a unit test under `test/features/<name>/` |
 
-Run from the **project root** (where `.arise.yaml` exists):
+*(Works identically for `mvvm`, `mvc`, and `mvp`, mapping to each architecture's native layers.)*
+
+**Other useful options:**
 
 ```bash
-arise generate feature auth
+arise gen feature User-Profile          # normalises to lib/features/user_profile/
+arise gen feature auth -t full --force  # overwrite an existing feature (-f)
+arise gen feature --list                # list available templates & active architecture (-l)
 ```
 
-Arise reads `.arise.yaml` to determine the architecture and creates the matching layer structure:
+---
 
-```text
-# Clean Architecture
-lib/features/auth/
-├── data/
-├── domain/
-└── presentation/
+### `arise add`
 
-# MVVM
-lib/features/auth/
-├── model/
-├── view/
-└── viewmodel/
-```
-
-Feature names are normalised automatically:
+Adds either a **built-in Arise module** or **any package from `pub.dev`**:
 
 ```bash
-arise generate feature User-Profile
-# → creates lib/features/user_profile/
+arise add dio             # built-in module: adds DioClient, installs dio, updates .arise.yaml
+arise add get_it          # built-in module: adds injection.dart, installs get_it, updates .arise.yaml
+arise add intl            # pub.dev package: runs flutter pub add intl (.arise.yaml unchanged)
+arise add -d mockito      # pub.dev dev dependency: runs flutter pub add --dev mockito
+arise add --list          # list all built-in Arise modules (-l)
 ```
 
-If the feature directory already exists, Arise refuses to overwrite it by default:
+---
+
+### `arise info`
+
+Shows the current project's `.arise.yaml` configuration (architecture, state management, routing, networking, DI, storage, lint) and lists all features detected under `lib/features/`:
 
 ```bash
-arise generate feature auth
-# Feature "auth" already exists at lib/features/auth.
-# Use --force to overwrite.
-
-arise generate feature auth --force   # explicit overwrite
+arise info
 ```
 
-Use `--template` to select an alternative variant when available (default: `minimal`):
+---
+
+### `arise doctor`
+
+Checks your environment and project health — Dart SDK, Flutter SDK, Arise template integrity, and `.arise.yaml` validity:
 
 ```bash
-arise generate feature auth --template minimal
-```
-
-> **Note:** Only the `minimal` template is available in v1.1. Additional templates (`standard`, `full`) are planned for future releases.
-
-List available feature templates and highlight active project architecture:
-
-```bash
-arise generate feature --list
-```
-
-See all options:
-
-```bash
-arise generate feature --help
+arise doctor
 ```
 
 ## Global Help

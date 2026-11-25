@@ -147,8 +147,8 @@ void main() {
 
     test('missing template variant throws for unknown template name', () async {
       expect(
-        () =>
-            TemplateLoader().load(ArisePaths.featureTemplate('clean', 'full')),
+        () => TemplateLoader()
+            .load(ArisePaths.featureTemplate('clean', 'unknown')),
         throwsException,
       );
     });
@@ -198,6 +198,41 @@ void main() {
           );
         }
       });
+    }
+
+    for (final arch in ['clean', 'mvvm', 'mvc', 'mvp']) {
+      for (final template in ['standard', 'full']) {
+        test('$arch $template template renders case-aware Dart files',
+            () async {
+          final module = await TemplateLoader().load(
+            ArisePaths.featureTemplate(arch, template),
+          );
+          final merged = TemplateMerger().merge([module]);
+
+          await TemplateService().generate(
+            projectPath: tempDir.path,
+            template: merged,
+            customVariables: {
+              'project_name': 'sample_app',
+              'feature_name': 'user_profile',
+            },
+          );
+
+          final featureRoot = '${tempDir.path}/lib/features/user_profile';
+          expect(Directory(featureRoot).existsSync(), isTrue);
+
+          final expectedFile = switch (arch) {
+            'clean' => '$featureRoot/domain/entities/user_profile_entity.dart',
+            'mvvm' => '$featureRoot/viewmodel/user_profile_viewmodel.dart',
+            'mvc' => '$featureRoot/controller/user_profile_controller.dart',
+            'mvp' => '$featureRoot/presenter/user_profile_presenter.dart',
+            _ => '',
+          };
+
+          final content = await File(expectedFile).readAsString();
+          expect(content, contains('UserProfile'));
+        });
+      }
     }
   });
 }

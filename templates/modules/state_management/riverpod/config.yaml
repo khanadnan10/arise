@@ -4,7 +4,8 @@ description: Compile-safe reactive state management by Remi Rousselet.
 version: 1.0.0
 author: Arise
 
-folders: []
+folders:
+  - lib/core/state
 
 packages:
   - name: flutter_riverpod
@@ -14,3 +15,7 @@ conflicts:
   - provider
   - bloc
   - getx
+
+variables:
+  state_imports: "import 'package:flutter_riverpod/flutter_riverpod.dart';\n"
+  main_root: "const ProviderScope(child: App())"

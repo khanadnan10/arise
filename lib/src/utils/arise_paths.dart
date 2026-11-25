@@ -46,12 +46,74 @@ class ArisePaths {
     return '$packageRoot/templates/modules/networking/$name/config.yaml';
   }
 
+  /// Absolute path to a dependency-injection config.yaml.
+  static String dependencyInjectionTemplate(String name) {
+    return '$packageRoot/templates/modules/dependency_injection/$name/config.yaml';
+  }
+
+  /// Absolute path to a storage config.yaml.
+  static String storageTemplate(String name) {
+    return '$packageRoot/templates/modules/storage/$name/config.yaml';
+  }
+
+  /// Absolute path to a lint config.yaml.
+  static String lintTemplate(String name) {
+    return '$packageRoot/templates/modules/lint/$name/config.yaml';
+  }
+
+  /// Supported addable module categories in `arise add`.
+  static const List<String> addableCategories = [
+    'state_management',
+    'routing',
+    'networking',
+    'dependency_injection',
+    'storage',
+    'lint',
+  ];
+
+  /// Lists available modules per addable category on disk.
+  static Map<String, List<String>> availableModulesByCategory() {
+    final result = <String, List<String>>{};
+    for (final category in addableCategories) {
+      final dir = Directory('$packageRoot/templates/modules/$category');
+      if (!dir.existsSync()) continue;
+      final modules = dir
+          .listSync()
+          .whereType<Directory>()
+          .where((d) => File('${d.path}/config.yaml').existsSync())
+          .map((d) => d.uri.pathSegments.where((s) => s.isNotEmpty).last)
+          .toList()
+        ..sort();
+      if (modules.isNotEmpty) {
+        result[category] = modules;
+      }
+    }
+    return result;
+  }
+
+  /// Resolves a module name to `(category, configPath)` if it exists on disk.
+  static ({String category, String configPath})? findModule(String name) {
+    for (final category in addableCategories) {
+      final configPath =
+          '$packageRoot/templates/modules/$category/$name/config.yaml';
+      if (File(configPath).existsSync()) {
+        return (category: category, configPath: configPath);
+      }
+    }
+    return null;
+  }
+
   /// Absolute path to a feature config.yaml.
   static String featureTemplate(
     String architecture, [
-    String template = 'minimal',
+    String template = 'standard',
   ]) {
     return '$packageRoot/templates/modules/feature/$architecture/$template/config.yaml';
+  }
+
+  /// Absolute path to a state-management feature overlay config.yaml.
+  static String featureStateTemplate(String stateManagement) {
+    return '$packageRoot/templates/modules/feature_state/$stateManagement/config.yaml';
   }
 
   /// Lists available template names for a given architecture by reading

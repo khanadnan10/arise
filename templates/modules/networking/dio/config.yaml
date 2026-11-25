@@ -5,7 +5,8 @@ description: A powerful HTTP client for Dart/Flutter.
 version: 1.0.0
 author: Arise
 
-folders: []
+folders:
+  - lib/core/network
 
 packages:
   - name: dio

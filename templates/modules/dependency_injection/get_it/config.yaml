@@ -1,0 +1,19 @@
+name: GetIt
+category: dependency_injection
+description: Simple direct service locator for Dart and Flutter.
+version: 1.0.0
+author: Arise
+
+folders:
+  - lib/core/di
+
+packages:
+  - name: get_it
+
+requires: []
+conflicts:
+  - injectable
+
+variables:
+  di_imports: "import 'core/di/injection.dart';\n"
+  di_setup: "  await configureDependencies();\n"

@@ -71,6 +71,15 @@ void main() {
       expect(result.exitCode, 64);
     });
 
+    test('extra unexpected positional argument → exit 64', () async {
+      final result = await _runFeature(
+        ['auth', '-f', 'standart'],
+        workingDirectory: tempDir.path,
+      );
+      expect(result.exitCode, 64);
+      expect(result.stderr, contains('Unexpected argument'));
+    });
+
     test('path traversal (../auth) → exit 64 with message', () async {
       final result = await _runFeature([
         '../auth',
@@ -212,7 +221,7 @@ void main() {
         final result = await _runFeature([
           'auth',
           '--template',
-          'full',
+          'unknown',
         ], workingDirectory: tempDir.path);
         expect(result.exitCode, 1);
         expect(result.stderr, contains('not found'));
@@ -251,11 +260,11 @@ void main() {
       expect(Directory('$root/presentation').existsSync(), isTrue);
     });
 
-    test('explicit --template minimal behaves same as default', () async {
+    test('explicit --template standard behaves same as default', () async {
       final result = await _runFeature([
         'auth',
         '--template',
-        'minimal',
+        'standard',
       ], workingDirectory: tempDir.path);
       expect(result.exitCode, 0, reason: result.stderr.toString());
       expect(
@@ -269,7 +278,7 @@ void main() {
         'auth',
       ], workingDirectory: tempDir.path);
       expect(result.stdout, contains('clean'));
-      expect(result.stdout, contains('minimal'));
+      expect(result.stdout, contains('standard'));
     });
 
     test('second run on same feature name → exit 1 (already exists)', () async {
@@ -346,8 +355,65 @@ void main() {
       for (final arch in ['clean', 'mvvm', 'mvc', 'mvp']) {
         expect(result.stdout, contains(arch));
       }
-      // minimal template must appear
+      // minimal, standard, and full templates must appear
       expect(result.stdout, contains('minimal'));
+      expect(result.stdout, contains('standard'));
+      expect(result.stdout, contains('full'));
+    });
+
+    test('standard and full templates generate Dart files and state overlay',
+        () async {
+      final dir = await Directory.systemTemp.createTemp('arise_cmd_std_full_');
+      addTearDown(() => dir.delete(recursive: true));
+
+      await ManifestService().save(
+        projectPath: dir.path,
+        manifest: const ProjectManifest(
+          version: 1,
+          projectName: 'shop_app',
+          architecture: 'clean',
+          stateManagement: 'riverpod',
+          routing: 'go_router',
+          networking: 'dio',
+        ),
+      );
+
+      final stdResult = await _runFeature(
+        ['user-profile', '--template', 'standard'],
+        workingDirectory: dir.path,
+      );
+      expect(stdResult.exitCode, 0, reason: stdResult.stderr.toString());
+      expect(stdResult.stdout, contains('riverpod'));
+      expect(
+        File(
+          '${dir.path}/lib/features/user_profile/domain/entities/user_profile_entity.dart',
+        ).existsSync(),
+        isTrue,
+      );
+      expect(
+        File(
+          '${dir.path}/lib/features/user_profile/presentation/providers/user_profile_provider.dart',
+        ).existsSync(),
+        isTrue,
+      );
+
+      final fullResult = await _runFeature(
+        ['order_history', '--template', 'full'],
+        workingDirectory: dir.path,
+      );
+      expect(fullResult.exitCode, 0, reason: fullResult.stderr.toString());
+      expect(
+        File(
+          '${dir.path}/lib/features/order_history/domain/usecases/get_order_history.dart',
+        ).existsSync(),
+        isTrue,
+      );
+      expect(
+        File(
+          '${dir.path}/test/features/order_history/order_history_test.dart',
+        ).existsSync(),
+        isTrue,
+      );
     });
 
     test('marks current project architecture with arrow', () async {

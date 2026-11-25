@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 
+import 'package:arise/src/models/template_hook.dart';
+import 'package:arise/src/services/hook_service.dart';
+import 'package:arise/src/services/package_service.dart';
 import 'package:arise/src/services/template_loader.dart';
 import 'package:arise/src/services/template_merger.dart';
 import 'package:arise/src/services/template_service.dart';
@@ -87,21 +90,43 @@ void main() {
         );
 
         // 4. Install packages declared by the modules.
-        final pubGet = await Process.run(
-            'flutter',
-            [
-              'pub',
-              'get',
-            ],
-            workingDirectory: projectPath);
+        await PackageService().install(projectPath, merged.packages);
 
-        expect(
-          pubGet.exitCode,
-          0,
-          reason: '${pubGet.stdout}\n${pubGet.stderr}',
+        // 5. Run postPubGet hooks (e.g., build_runner for AutoRoute).
+        await HookService().runHooks(
+          projectPath: projectPath,
+          hooks: merged.hooks,
+          phase: HookPhase.postPubGet,
         );
 
-        // 5. Verify the generated project is clean.
+        // 6. Generate a full state-aware feature into the project.
+        final stateLayer = switch (combination.architecture) {
+          'mvvm' => 'viewmodel',
+          'mvc' => 'controller',
+          'mvp' => 'presenter',
+          _ => 'presentation',
+        };
+        final featureModule = await loader.load(
+          ArisePaths.featureTemplate(combination.architecture, 'full'),
+        );
+        final stateOverlay = await loader.load(
+          ArisePaths.featureStateTemplate(combination.stateManagement),
+        );
+        final featureMerged = TemplateMerger().merge([
+          featureModule,
+          stateOverlay,
+        ]);
+        await TemplateService().generate(
+          projectPath: projectPath,
+          template: featureMerged,
+          customVariables: {
+            'project_name': projectName,
+            'feature_name': 'user_profile',
+            'state_layer': stateLayer,
+          },
+        );
+
+        // 7. Verify the generated project is clean.
         final analyze = await Process.run(
             'flutter',
             [
