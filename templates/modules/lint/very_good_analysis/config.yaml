@@ -1,0 +1,14 @@
+name: Very Good Analysis
+category: lint
+description: Strict Dart & Flutter lint rules from Very Good Ventures.
+version: 1.0.0
+author: Arise
+
+folders: []
+
+packages:
+  - name: very_good_analysis
+    dev: true
+
+requires: []
+conflicts: []

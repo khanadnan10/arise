@@ -2,6 +2,30 @@
 
 All notable changes to Arise will be documented in this file.
 
+## 1.2.0 - 2026-11-25
+
+### Added
+
+- Starter wiring files for existing `create` modules (`DioClient`, `GoRouter` `appRouter`, `AutoRoute` `AppRouter` + `HomePage`, Riverpod `appTitleProvider`, Bloc `AppBlocObserver`, Provider `AppState`, GetX `AppController`)
+- Composable `main.dart` and `app.dart` bootstrap wiring across architectures, state management, routing, and dependency injection
+- `standard` and `full` feature templates across Clean Architecture, MVVM, MVC, and MVP (with `standard` as the new default template, starter Dart files, and feature unit tests in `full`)
+- State-management-aware feature overlays (`templates/modules/feature_state/`) for Riverpod, Bloc, Provider, and GetX driven by `.arise.yaml`
+- Case-aware template variable expansion (`*_pascal`, `*_camel`, `*_title`) via `TemplateVariables`
+- Dependency injection (`get_it`, `injectable`), local storage (`shared_preferences`), and lint (`very_good_analysis`) modules
+- Non-interactive flags on `arise create`: `--arch`, `--state`, `--route`, `--network`, `--di`, `--storage`, `--lint`
+- `gen` alias for `arise generate` (`arise gen feature <name>`)
+- `arise add <module|package>` command (with `--dev` and `--list`) to add built-in Arise modules (updating `.arise.yaml`) or install any pub.dev package via `flutter pub add` without modifying `.arise.yaml`
+- `arise info` command to inspect `.arise.yaml` configuration and generated features
+- `arise doctor` command to verify Dart/Flutter SDKs, template integrity, and project manifest health
+- `requires` and `conflicts` validation in `TemplateMerger`
+
+### Fixed
+
+- Run `auto_route` `build_runner` hook in `postPubGet` (after package installation) with `--delete-conflicting-outputs`
+- Validate `flutter create` exit code and project package names in `arise create`
+
+---
+
 ## 1.1.0 - 2026-08-08
 
 ### Added

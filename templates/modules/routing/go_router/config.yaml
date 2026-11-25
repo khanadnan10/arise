@@ -4,7 +4,8 @@ description: Declarative routing for Flutter using the Router API.
 version: 1.0.0
 author: Arise
 
-folders: []
+folders:
+  - lib/core/router
 
 packages:
   - name: go_router
@@ -12,3 +13,7 @@ packages:
 requires: []
 conflicts:
   - auto_route
+
+variables:
+  app_imports: "import 'core/router/app_router.dart';\n"
+  app_body: "MaterialApp.router(\n      debugShowCheckedModeBanner: false,\n      title: '{{app_name}}',\n      theme: ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true),\n      routerConfig: appRouter,\n    )"

@@ -8,4 +8,11 @@ enum StateManagement {
   const StateManagement(this.label);
 
   final String label;
+
+  static StateManagement fromName(String name) {
+    return StateManagement.values.firstWhere(
+      (s) => s.name == name,
+      orElse: () => throw ArgumentError('Unknown state management: $name'),
+    );
+  }
 }

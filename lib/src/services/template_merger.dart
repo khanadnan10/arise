@@ -5,6 +5,28 @@ import '../models/template_module.dart';
 
 class TemplateMerger {
   MergedTemplate merge(List<TemplateModule> modules) {
+    final loadedIds = <String>{
+      for (final module in modules) ..._moduleIdentifiers(module),
+    };
+
+    for (final module in modules) {
+      for (final conflict in module.conflicts) {
+        if (loadedIds.contains(conflict.toLowerCase())) {
+          throw StateError(
+            'Module "${module.name}" conflicts with "$conflict".',
+          );
+        }
+      }
+
+      for (final requirement in module.requires) {
+        if (!loadedIds.contains(requirement.toLowerCase())) {
+          throw StateError(
+            'Module "${module.name}" requires "$requirement".',
+          );
+        }
+      }
+    }
+
     final folders = <String>{};
     final packages = <String, TemplatePackage>{};
     final templateDirectories = <String>[];
@@ -32,5 +54,16 @@ class TemplateMerger {
       variables: variables,
       hooks: hooks,
     );
+  }
+
+  Iterable<String> _moduleIdentifiers(TemplateModule module) sync* {
+    yield module.name.toLowerCase();
+    final dir = module.templateDir;
+    if (dir != null && dir.isNotEmpty) {
+      final segments = dir.split(RegExp(r'[/\\]')).where((s) => s.isNotEmpty);
+      if (segments.isNotEmpty) {
+        yield segments.last.toLowerCase();
+      }
+    }
   }
 }

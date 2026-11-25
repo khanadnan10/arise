@@ -31,8 +31,16 @@ Future<void> copyDirectory(
 
 String _renderString(String input, Map<String, String> variables) {
   var result = input;
-  for (final entry in variables.entries) {
-    result = result.replaceAll('{{${entry.key}}}', entry.value);
+  for (var pass = 0; pass < 3; pass++) {
+    var changed = false;
+    for (final entry in variables.entries) {
+      final token = '{{${entry.key}}}';
+      if (result.contains(token)) {
+        result = result.replaceAll(token, entry.value);
+        changed = true;
+      }
+    }
+    if (!changed) break;
   }
   return result;
 }
@@ -42,11 +50,7 @@ Future<void> _copyFile(
   File destination,
   Map<String, String> variables,
 ) async {
-  var content = await source.readAsString();
-
-  for (final entry in variables.entries) {
-    content = content.replaceAll('{{${entry.key}}}', entry.value);
-  }
+  final content = _renderString(await source.readAsString(), variables);
 
   await destination.parent.create(recursive: true);
   await destination.writeAsString(content);

@@ -1,8 +1,15 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:arise/src/models/architecture.dart';
 import 'package:arise/src/models/create_config.dart';
+import 'package:arise/src/models/dependency_injection.dart';
+import 'package:arise/src/models/lint.dart';
+import 'package:arise/src/models/networking.dart';
 import 'package:arise/src/models/project_manifest.dart';
+import 'package:arise/src/models/routing.dart';
+import 'package:arise/src/models/state_management.dart';
+import 'package:arise/src/models/storage.dart';
 import 'package:arise/src/models/template_hook.dart';
 import 'package:arise/src/services/hook_service.dart';
 import 'package:arise/src/services/manifest_service.dart';
@@ -11,35 +18,122 @@ import '../../services/template_merger.dart';
 import '../../services/template_registry.dart';
 import '../../services/template_service.dart';
 import '../../utils/arise_paths.dart';
+import '../../utils/feature_name.dart';
 import '../../wizards/create_wizard.dart';
 
 class CreateCommand extends Command<int> {
   CreateCommand() {
-    argParser.addFlag(
-      'skip',
-      abbr: 's',
-      help: 'Skip the interactive setup.',
-      negatable: false,
-    );
+    argParser
+      ..addFlag(
+        'skip',
+        abbr: 's',
+        help: 'Skip the interactive setup (defaults omitted options to none).',
+        negatable: false,
+      )
+      ..addOption(
+        'arch',
+        abbr: 'a',
+        help: 'Project architecture.',
+        allowed: Architecture.values.map((e) => e.name).toList(),
+      )
+      ..addOption(
+        'state',
+        help: 'State management solution.',
+        allowed: StateManagement.values.map((e) => e.name).toList(),
+      )
+      ..addOption(
+        'route',
+        abbr: 'r',
+        help: 'Routing solution.',
+        allowed: Routing.values.map((e) => e.templateName).toList(),
+      )
+      ..addOption(
+        'network',
+        abbr: 'n',
+        help: 'Networking client.',
+        allowed: Networking.values.map((e) => e.templateName).toList(),
+      )
+      ..addOption(
+        'di',
+        help: 'Dependency injection solution.',
+        allowed: DependencyInjection.values.map((e) => e.templateName).toList(),
+      )
+      ..addOption(
+        'storage',
+        help: 'Local storage solution.',
+        allowed: Storage.values.map((e) => e.templateName).toList(),
+      )
+      ..addOption(
+        'lint',
+        help: 'Linting ruleset.',
+        allowed: Lint.values.map((e) => e.templateName).toList(),
+      );
   }
 
   @override
   String get name => 'create';
 
   @override
-  String get description => 'Create a new Flutter project.';
+  String get invocation =>
+      '${runner?.executableName ?? 'arise'} $name [project_name]';
+
+  @override
+  String get description => 'Create a new Flutter project.\n'
+      '\n'
+      'Examples:\n'
+      '  arise create\n'
+      '  arise create my_app --skip\n'
+      '  arise create my_app --arch clean --state riverpod --route go_router --network dio';
 
   @override
   Future<int> run() async {
+    final skip = argResults?['skip'] == true;
+    final rest = argResults?.rest ?? [];
+    if (rest.length > 1) {
+      usageException('Unexpected argument(s): ${rest.skip(1).join(' ')}.');
+    }
+    final rawProjectName = rest.firstOrNull;
+
+    if (skip && (rawProjectName == null || rawProjectName.trim().isEmpty)) {
+      usageException('A project name is required when using --skip.');
+    }
+
     stdout.writeln('> Welcome to Arise');
     stdout.writeln();
 
+    final archOption = argResults?['arch'] as String?;
+    final stateOption = argResults?['state'] as String?;
+    final routeOption = argResults?['route'] as String?;
+    final networkOption = argResults?['network'] as String?;
+    final diOption = argResults?['di'] as String?;
+    final storageOption = argResults?['storage'] as String?;
+    final lintOption = argResults?['lint'] as String?;
+
     final config = await CreateWizard().run(
-      skip: argResults?['skip'] == true,
-      projectName: argResults?.rest.firstOrNull,
+      skip: skip,
+      projectName: rawProjectName?.trim(),
+      architecture:
+          archOption != null ? Architecture.fromName(archOption) : null,
+      stateManagement:
+          stateOption != null ? StateManagement.fromName(stateOption) : null,
+      routing: routeOption != null ? Routing.fromName(routeOption) : null,
+      networking:
+          networkOption != null ? Networking.fromName(networkOption) : null,
+      dependencyInjection:
+          diOption != null ? DependencyInjection.fromName(diOption) : null,
+      storage: storageOption != null ? Storage.fromName(storageOption) : null,
+      lint: lintOption != null ? Lint.fromName(lintOption) : null,
     );
 
-    final projectName = config.projectName;
+    final projectName = config.projectName.trim();
+
+    if (!FeatureName.isValid(projectName)) {
+      stderr.writeln(
+        'Invalid project name "$projectName". '
+        'Use a valid Dart package name (lowercase letters, digits, underscores, starting with a letter).',
+      );
+      return 64;
+    }
 
     if (_projectExists(projectName)) {
       stderr.writeln('❌ Project "$projectName" already exists.');
@@ -58,8 +152,15 @@ class CreateCommand extends Command<int> {
     stdout.writeln('State Management: ${config.stateManagement.label}');
     stdout.writeln('Routing: ${config.routing.label}');
     stdout.writeln('Networking: ${config.networking.label}');
+    stdout.writeln('Dependency Injection: ${config.dependencyInjection.label}');
+    stdout.writeln('Storage: ${config.storage.label}');
+    stdout.writeln('Lint: ${config.lint.label}');
 
-    await _createFlutterProject(projectName);
+    final createExitCode = await _createFlutterProject(projectName);
+    if (createExitCode != 0) {
+      stderr.writeln('❌ Failed to create Flutter project "$projectName".');
+      return createExitCode;
+    }
 
     final paths = _resolveTemplatePaths(config);
 
@@ -115,6 +216,9 @@ class CreateCommand extends Command<int> {
         stateManagement: config.stateManagement.name,
         routing: config.routing.templateName,
         networking: config.networking.templateName,
+        dependencyInjection: config.dependencyInjection.templateName,
+        storage: config.storage.templateName,
+        lint: config.lint.templateName,
       ),
     );
 
@@ -123,7 +227,7 @@ class CreateCommand extends Command<int> {
     stdout.writeln();
     stdout.writeln('💡 Next: cd $projectName');
     stdout.writeln(
-      '   Then run: arise generate feature <name>  '
+      '   Then run: arise gen feature <name>  '
       'to scaffold your first feature.',
     );
 
@@ -139,6 +243,14 @@ class CreateCommand extends Command<int> {
         ArisePaths.routingTemplate(config.routing.templateName),
       if (config.networking.templateName != 'none')
         ArisePaths.networkingTemplate(config.networking.templateName),
+      if (config.dependencyInjection.templateName != 'none')
+        ArisePaths.dependencyInjectionTemplate(
+          config.dependencyInjection.templateName,
+        ),
+      if (config.storage.templateName != 'none')
+        ArisePaths.storageTemplate(config.storage.templateName),
+      if (config.lint.templateName != 'none')
+        ArisePaths.lintTemplate(config.lint.templateName),
     ];
   }
 

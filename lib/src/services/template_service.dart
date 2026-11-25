@@ -2,6 +2,7 @@ import 'dart:io';
 
 import '../models/merged_template.dart';
 import '../utils/directory_copy.dart';
+import '../utils/template_variables.dart';
 
 class TemplateService {
   Future<void> generate({
@@ -13,12 +14,12 @@ class TemplateService {
       projectPath,
     ).uri.pathSegments.where((s) => s.isNotEmpty).last;
 
-    final allVariables = {
+    final allVariables = TemplateVariables.expand({
       'project_name': projectName,
       'app_name': projectName,
       ...template.variables,
       ...customVariables,
-    };
+    });
 
     await _createFolders(projectPath, template.folders);
 

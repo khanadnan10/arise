@@ -3,3 +3,12 @@ name: None
 folders: []
 
 packages: []
+
+variables:
+  state_imports: ""
+  state_setup: ""
+  di_imports: ""
+  di_setup: ""
+  main_root: "const App()"
+  app_imports: ""
+  app_body: "MaterialApp(\n      debugShowCheckedModeBanner: false,\n      title: '{{app_name}}',\n      theme: ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true),\n      home: const Scaffold(body: Center(child: Text('Welcome to Arise 🚀'))),\n    )"

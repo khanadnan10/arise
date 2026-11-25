@@ -10,8 +10,12 @@ class GenerateCommand extends Command<int> {
   String get name => 'generate';
 
   @override
+  List<String> get aliases => const ['gen'];
+
+  @override
   String get description => 'Generate resources inside an Arise project.\n'
       '\n'
       'Example:\n'
-      '  arise generate feature auth';
+      '  arise generate feature auth\n'
+      '  arise gen feature auth';
 }
