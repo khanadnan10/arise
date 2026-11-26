@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docs — ARISE CLI</title>
+  <meta name="description"
+    content="Complete documentation for ARISE — project bootstrapping, CLI flags, feature scaffolding, built-in modules, and custom templates." />
+  <meta name="theme-color" content="#03050A" />
+  <link rel="icon" type="image/webp" href="assets/arise-logo.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="docs.css" />
+</head>
+
+<body>
+  <!-- Docs Layout -->
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="Documentation Sections">
+      <a href="index.html" class="sidebar-back">← Back to ARISE</a>
+      <span class="sidebar-label">GUIDE</span>
+      <a href="#quick-start" class="sidebar-link is-active">Quick Start</a>
+      <a href="#supported-stack" class="sidebar-link">Supported Stack</a>
+      <a href="#create-command" class="sidebar-link">arise create &amp; Flags</a>
+      <a href="#feature-scaffolding" class="sidebar-link">Feature Scaffolding</a>
+      <a href="#project-tooling" class="sidebar-link">add, info &amp; doctor</a>
+      <a href="#architecture-modules" class="sidebar-link">Architecture &amp; Modules</a>
+    </aside>
+
+    <main class="docs-content">
+      <div class="docs-hero">
+        <span class="eyebrow">DOCUMENTATION · v1.2.0</span>
+        <h1>Unlock ARISE's Full Potential</h1>
+        <p>
+          ARISE is a modular, YAML-driven CLI for bootstrapping production-ready Flutter projects and scaffolding consistent features across your entire lifecycle.
+        </p>
+      </div>
+
+      <!-- 01 Quick Start -->
+      <section class="doc-section" id="quick-start">
+        <h2>01 · Quick Start</h2>
+        <p>Activate ARISE globally from <code>pub.dev</code> and run the interactive project wizard:</p>
+        <div class="code-block">
+          <pre><code>dart pub global activate arise
+arise create</code></pre>
+          <button type="button" class="copy-btn" data-copy="dart pub global activate arise && arise create">Copy</button>
+        </div>
+        <p class="note">
+          Only the project name is required. Every module is optional, and your choices are persisted in <code>.arise.yaml</code> at the project root so future commands stay aligned with your stack.
+        </p>
+      </section>
+
+      <!-- 02 Supported Stack -->
+      <section class="doc-section" id="supported-stack">
+        <h2>02 · Supported Stack</h2>
+        <p>Choose any combination of built-in modules during setup or add them later:</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Options</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Architecture</strong></td>
+                <td><code>clean</code>, <code>mvvm</code>, <code>mvc</code>, <code>mvp</code>, <code>none</code></td>
+              </tr>
+              <tr>
+                <td><strong>State Management</strong></td>
+                <td><code>riverpod</code>, <code>bloc</code>, <code>provider</code>, <code>getx</code>, <code>none</code></td>
+              </tr>
+              <tr>
+                <td><strong>Routing</strong></td>
+                <td><code>go_router</code>, <code>auto_route</code>, <code>none</code></td>
+              </tr>
+              <tr>
+                <td><strong>Networking</strong></td>
+                <td><code>dio</code>, <code>none</code></td>
+              </tr>
+              <tr>
+                <td><strong>Dependency Injection</strong></td>
+                <td><code>get_it</code>, <code>injectable</code>, <code>none</code></td>
+              </tr>
+              <tr>
+                <td><strong>Local Storage</strong></td>
+                <td><code>shared_preferences</code>, <code>none</code></td>
+              </tr>
+              <tr>
+                <td><strong>Linting</strong></td>
+                <td><code>very_good_analysis</code>, <code>none</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 03 arise create & Flags -->
+      <section class="doc-section" id="create-command">
+        <h2>03 · <code>arise create</code> &amp; Non-Interactive Flags</h2>
+        <p>
+          Skip the interactive prompts in scripts, team templates, or CI by passing configuration flags directly. ARISE creates the Flutter project, wires starter files (<code>lib/main.dart</code>, <code>lib/app.dart</code>, <code>lib/core/</code>), installs dependencies, runs codegen hooks (such as <code>build_runner</code>), and writes <code>.arise.yaml</code>.
+        </p>
+        <div class="code-block">
+          <pre><code>arise create my_app \
+  --arch clean \
+  --state riverpod \
+  --route go_router \
+  --network dio \
+  --di get_it \
+  --storage shared_preferences \
+  --lint very_good_analysis</code></pre>
+          <button type="button" class="copy-btn"
+            data-copy="arise create my_app --arch clean --state riverpod --route go_router --network dio --di get_it --storage shared_preferences --lint very_good_analysis">Copy</button>
+        </div>
+        <p class="note">
+          Short flags: <code>-a</code> (<code>--arch</code>), <code>-r</code> (<code>--route</code>), <code>-n</code> (<code>--network</code>). To generate a standard Flutter project without Arise modules, run <code>arise create --skip my_app</code>.
+        </p>
+      </section>
+
+      <!-- 04 Feature Scaffolding -->
+      <section class="doc-section" id="feature-scaffolding">
+        <h2>04 · Feature Scaffolding</h2>
+        <p>
+          Run <code>arise gen feature</code> from your project root (where <code>.arise.yaml</code> lives). ARISE reads your active architecture and state management to generate matching layers under <code>lib/features/&lt;name&gt;/</code>.
+        </p>
+        <div class="code-block">
+          <pre><code>arise gen feature auth            # standard (default)
+arise gen feature auth -t minimal  # empty layer folders only
+arise gen feature auth -t full     # complete feature + unit test</code></pre>
+          <button type="button" class="copy-btn" data-copy="arise gen feature auth -t full">Copy</button>
+        </div>
+
+        <div class="grid-3">
+          <div class="info-tile">
+            <code>-t minimal</code>
+            <p>Empty architecture layer folders (e.g. <code>data/</code>, <code>domain/</code>, <code>presentation/</code>) with <code>.gitkeep</code>.</p>
+          </div>
+          <div class="info-tile">
+            <code>-t standard</code>
+            <p>Starter Dart classes per layer (Entity, Repository, Page) plus state files (Notifier, Bloc, Provider, or Controller).</p>
+          </div>
+          <div class="info-tile">
+            <code>-t full</code>
+            <p>Everything in <code>standard</code> plus Model (<code>fromJson</code>/<code>toJson</code>), Remote DataSource, UseCase, Widget, and unit test.</p>
+          </div>
+        </div>
+
+        <p class="note">
+          Names are normalized automatically (<code>User-Profile</code> → <code>lib/features/user_profile/</code>). Use <code>--force</code> (<code>-f</code>) to overwrite or <code>--list</code> (<code>-l</code>) to inspect templates.
+        </p>
+      </section>
+
+      <!-- 05 add, info & doctor -->
+      <section class="doc-section" id="project-tooling">
+        <h2>05 · <code>arise add</code>, <code>info</code> &amp; <code>doctor</code></h2>
+        <p>Extend an existing project or audit your environment health at any time:</p>
+        <div class="code-block">
+          <pre><code>arise add dio             # built-in module: adds DioClient, installs dio, updates .arise.yaml
+arise add intl            # pub.dev package: runs flutter pub add intl
+arise add -d mockito      # pub.dev dev dependency
+arise add --list          # list all built-in Arise modules
+
+arise info                # show .arise.yaml config and detected features
+arise doctor              # check Dart SDK, Flutter SDK, templates &amp; .arise.yaml</code></pre>
+          <button type="button" class="copy-btn" data-copy="arise info && arise doctor">Copy</button>
+        </div>
+      </section>
+
+      <!-- 06 Architecture & Custom Modules -->
+      <section class="doc-section" id="architecture-modules">
+        <h2>06 · Architecture &amp; Custom Modules</h2>
+        <p>
+          ARISE decouples CLI commands from template details using a modular pipeline:
+          <code>Command</code> → <code>Wizard</code> → <code>TemplateRegistry</code> → <code>TemplateLoader</code> → <code>TemplateMerger</code> → <code>TemplateService</code>.
+        </p>
+        <p>
+          Each built-in integration lives under <code>templates/modules/&lt;category&gt;/&lt;name&gt;/</code> with a <code>config.yaml</code> and an optional <code>files/</code> directory mirroring the target Flutter project structure:
+        </p>
+        <div class="code-block">
+          <pre><code>name: Riverpod
+folders: []
+packages:
+  - name: flutter_riverpod</code></pre>
+          <button type="button" class="copy-btn" data-copy="name: Riverpod&#10;folders: []&#10;packages:&#10;  - name: flutter_riverpod">Copy</button>
+        </div>
+        <div class="docs-footer-links">
+          <a href="https://pub.dev/packages/arise" target="_blank" rel="noopener noreferrer">pub.dev/packages/arise ↗</a>
+          <a href="https://github.com/khanadnan10/arise/tree/main/doc" target="_blank" rel="noopener noreferrer">Source Markdown Docs on GitHub ↗</a>
+          <a href="index.html">← Back to Home</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      document.querySelectorAll("[data-copy]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(btn.dataset.copy || "");
+            btn.textContent = "Copied";
+            setTimeout(() => { btn.textContent = "Copy"; }, 1600);
+          } catch {
+            btn.textContent = "Copy";
+          }
+        });
+      });
+
+      const sidebarLinks = document.querySelectorAll(".sidebar-link");
+      const sections = document.querySelectorAll(".doc-section");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const id = entry.target.id;
+              sidebarLinks.forEach((l) => {
+                l.classList.toggle("is-active", l.getAttribute("href") === `#${id}`);
+              });
+            }
+          });
+        },
+        { rootMargin: "-20% 0px -65% 0px" }
+      );
+      sections.forEach((s) => observer.observe(s));
+    })();
+  </script>
+</body>
+
+</html>

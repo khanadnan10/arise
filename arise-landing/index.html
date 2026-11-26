@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARISE — Build Better. Begin With ARISE.</title>
+  <meta name="description"
+    content="A modular CLI that transforms repetitive Flutter setup into a structured, configurable and reusable workflow." />
+  <meta name="theme-color" content="#03050A" />
+  <link rel="icon" type="image/webp" href="assets/arise-logo.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="preload" href="fonts/GeistPixel-Circle.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Full-Bleed Animated Blue Wave & Matrix Canvas -->
+  <div class="bg" aria-hidden="true">
+    <canvas id="bg-canvas" class="bg-canvas"></canvas>
+    <div class="bg-scrim"></div>
+  </div>
+
+  <!-- Single-Viewport Shell -->
+  <div class="viewport-shell" id="home">
+    <!-- Floating Header -->
+    <header class="site-header" data-reveal="nav">
+      <nav class="nav-pill" aria-label="Primary Navigation">
+        <a href="#home" class="nav-link is-active" data-nav="home">Home</a>
+        <a href="#features" class="nav-link" data-nav="features">Features</a>
+        <a href="docs.html" class="nav-link">Docs</a>
+        <a href="#installation" class="nav-link" data-nav="installation">Installation</a>
+      </nav>
+
+      <a href="https://github.com/khanadnan10/arise" class="header-cta" target="_blank" rel="noopener noreferrer">
+        <svg class="header-cta-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+        </svg>
+        <span>GitHub</span>
+        <span class="arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Open navigation menu" aria-expanded="false"
+        aria-controls="mobile-menu">
+        <span class="menu-icon" aria-hidden="true">
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+    </header>
+
+    <!-- Mobile Centered White Dropdown Menu -->
+    <div class="mobile-menu-backdrop" id="mobile-menu-backdrop" hidden>
+      <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile Navigation">
+        <a href="#home" class="mobile-menu-link is-active" data-nav="home">Home</a>
+        <a href="#features" class="mobile-menu-link" data-nav="features">Features</a>
+        <a href="docs.html" class="mobile-menu-link">Docs</a>
+        <a href="#installation" class="mobile-menu-link" data-nav="installation">Installation</a>
+        <a href="https://github.com/khanadnan10/arise" class="mobile-menu-link" target="_blank"
+          rel="noopener noreferrer">
+          GitHub ↗
+        </a>
+      </nav>
+    </div>
+
+    <!-- Centered Main Hero -->
+    <main class="hero">
+      <div class="headline-wrap" data-reveal="headline">
+        <h1 class="headline">ARISE</h1>
+      </div>
+
+      <p class="subheadline" data-reveal="subheadline">
+        Build better. Begin with <span class="subheadline-brand">ARISE</span>.
+      </p>
+
+      <p class="description" data-reveal="description">
+        A modular CLI that transforms repetitive Flutter setup into a structured, configurable and reusable workflow.
+      </p>
+
+      <div class="hero-actions" data-reveal="actions">
+        <a href="https://pub.dev/packages/arise" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+          <span>Get Started</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </main>
+
+    <!-- Bottom Trust Indicator -->
+    <div class="trust-indicator" data-reveal="trust">
+      <div class="trust-icons" aria-hidden="true">
+        <!-- Flutter Icon -->
+        <span class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M14.314 2L4 12.314l3.172 3.172L20.657 2h-6.343zm0 9.657l-5.314 5.314 5.314 5.029h6.343l-5.314-5.029 5.314-5.314h-6.343z"
+              fill="currentColor" />
+          </svg>
+        </span>
+        <!-- Dart Icon -->
+        <span class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M5.5 5.5L13 3l7 7v7.5L17.5 20H10l-7-7 2.5-7.5z" stroke="currentColor" stroke-width="1.6"
+              stroke-linejoin="round" />
+            <path d="M5.5 5.5L17.5 17.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+        </span>
+        <!-- GitHub Icon -->
+        <span class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+        </span>
+      </div>
+      <span class="trust-pill">BUILT FOR FLUTTER DEVELOPERS</span>
+    </div>
+  </div>
+
+  <!-- Features Sheet (triggered by Features nav link) -->
+  <div class="sheet-backdrop" id="features-backdrop" hidden>
+    <div class="sheet-dialog sheet-dialog--wide" role="dialog" aria-modal="true" aria-labelledby="features-title">
+      <div class="sheet-header">
+        <div>
+          <span class="sheet-eyebrow">MODULAR CAPABILITIES</span>
+          <h2 class="sheet-title" id="features-title">Built-in Architecture &amp; Tooling</h2>
+        </div>
+        <button type="button" class="sheet-close" data-close-sheet="features"
+          aria-label="Close features dialog">✕</button>
+      </div>
+
+      <div class="features-grid">
+        <div class="features-cell">
+          <div class="features-cell-head">
+            <span class="features-cell-sym" aria-hidden="true">{ }</span>
+            <h3>Architecture</h3>
+          </div>
+          <p>Clean Architecture, MVVM, MVC, MVP, or default Flutter layout.</p>
+          <div class="tag-row">
+            <code>clean</code><code>mvvm</code><code>mvc</code><code>mvp</code>
+          </div>
+        </div>
+
+        <div class="features-cell">
+          <div class="features-cell-head">
+            <span class="features-cell-sym" aria-hidden="true">◈</span>
+            <h3>State Management</h3>
+          </div>
+          <p>Pre-wired state layers and starter providers, blocs, or controllers.</p>
+          <div class="tag-row">
+            <code>riverpod</code><code>bloc</code><code>provider</code><code>getx</code>
+          </div>
+        </div>
+
+        <div class="features-cell">
+          <div class="features-cell-head">
+            <span class="features-cell-sym" aria-hidden="true">↔</span>
+            <h3>Routing &amp; Networking</h3>
+          </div>
+          <p>Declarative navigation and pre-configured HTTP client setup.</p>
+          <div class="tag-row">
+            <code>go_router</code><code>auto_route</code><code>dio</code>
+          </div>
+        </div>
+
+        <div class="features-cell">
+          <div class="features-cell-head">
+            <span class="features-cell-sym" aria-hidden="true">+</span>
+            <h3>DI, Storage &amp; Lint</h3>
+          </div>
+          <p>Service locators, local persistence, and strict static analysis.</p>
+          <div class="tag-row">
+            <code>get_it</code><code>injectable</code><code>shared_preferences</code><code>very_good_analysis</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="sheet-footer">
+        <span class="sheet-footer-note">Persisted in <code>.arise.yaml</code> for future commands</span>
+        <a href="docs.html" class="sheet-link-btn">
+          Read Full Docs →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Docs Sheet (triggered by Docs nav link) -->
+  <div class="sheet-backdrop" id="docs-backdrop" hidden>
+    <div class="sheet-dialog sheet-dialog--wide" role="dialog" aria-modal="true" aria-labelledby="docs-title">
+      <div class="sheet-header">
+        <div>
+          <span class="sheet-eyebrow">DOCUMENTATION</span>
+          <h2 class="sheet-title" id="docs-title">Unlock ARISE's Full Potential</h2>
+        </div>
+        <button type="button" class="sheet-close" data-close-sheet="docs" aria-label="Close docs dialog">✕</button>
+      </div>
+
+      <div class="docs-tabs" role="tablist" aria-label="Documentation Sections">
+        <button type="button" class="docs-tab is-active" role="tab" aria-selected="true" data-doc-tab="quickstart">Quick
+          Start</button>
+        <button type="button" class="docs-tab" role="tab" aria-selected="false" data-doc-tab="flags">CI &amp;
+          Flags</button>
+        <button type="button" class="docs-tab" role="tab" aria-selected="false" data-doc-tab="scaffold">Feature
+          Scaffold</button>
+        <button type="button" class="docs-tab" role="tab" aria-selected="false" data-doc-tab="modules">Add &amp;
+          Doctor</button>
+      </div>
+
+      <div class="docs-panels">
+        <div class="docs-panel is-active" role="tabpanel" data-doc-panel="quickstart">
+          <p class="docs-lead">Activate the CLI globally and launch the interactive setup wizard:</p>
+          <div class="cmd-box">
+            <code>dart pub global activate arise &amp;&amp; arise create</code>
+            <button type="button" class="cmd-copy"
+              data-copy="dart pub global activate arise && arise create">Copy</button>
+          </div>
+          <p class="docs-sub">Only the project name is required. Every module is optional, and your choices are saved to
+            <code>.arise.yaml</code> so later feature generation matches your stack automatically.
+          </p>
+        </div>
+
+        <div class="docs-panel" role="tabpanel" data-doc-panel="flags" hidden>
+          <p class="docs-lead">Bootstrap a full production stack in one non-interactive command (ideal for scripts &amp;
+            CI):</p>
+          <div class="cmd-box">
+            <code>arise create my_app --arch clean --state riverpod --route go_router --network dio --di get_it --storage shared_preferences --lint very_good_analysis</code>
+            <button type="button" class="cmd-copy"
+              data-copy="arise create my_app --arch clean --state riverpod --route go_router --network dio --di get_it --storage shared_preferences --lint very_good_analysis">Copy</button>
+          </div>
+          <p class="docs-sub">Need a plain Flutter app without Arise modules? Run
+            <code>arise create --skip my_app</code>.
+          </p>
+        </div>
+
+        <div class="docs-panel" role="tabpanel" data-doc-panel="scaffold" hidden>
+          <p class="docs-lead">Generate architecture- and state-aware features inside any existing Arise project:</p>
+          <div class="cmd-box">
+            <code>arise gen feature auth -t full</code>
+            <button type="button" class="cmd-copy" data-copy="arise gen feature auth -t full">Copy</button>
+          </div>
+          <p class="docs-sub">Templates: <code>minimal</code> (empty layers), <code>standard</code> (entities, repos,
+            pages &amp; state wiring), <code>full</code> (models, datasources, use cases, widgets &amp; unit tests).</p>
+        </div>
+
+        <div class="docs-panel" role="tabpanel" data-doc-panel="modules" hidden>
+          <p class="docs-lead">Extend your project anytime or verify environment health:</p>
+          <div class="cmd-box">
+            <code>arise add dio &amp;&amp; arise info &amp;&amp; arise doctor</code>
+            <button type="button" class="cmd-copy" data-copy="arise add dio && arise info && arise doctor">Copy</button>
+          </div>
+          <p class="docs-sub"><code>arise add</code> installs built-in Arise modules (updating <code>.arise.yaml</code>)
+            or any <code>pub.dev</code> package (<code>arise add -d mockito</code>). <code>arise doctor</code> checks
+            Dart, Flutter, and template integrity.</p>
+        </div>
+      </div>
+
+      <div class="sheet-footer">
+        <a href="https://github.com/khanadnan10/arise/tree/master/doc" class="sheet-ext-link" target="_blank"
+          rel="noopener noreferrer">
+          Full Markdown Docs on GitHub ↗
+        </a>
+        <a href="https://pub.dev/packages/arise" class="sheet-ext-link" target="_blank" rel="noopener noreferrer">
+          pub.dev Package ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compact Installation Quick-Sheet (triggered by Installation nav link) -->
+  <div class="sheet-backdrop" id="install-backdrop" hidden>
+    <div class="sheet-dialog" id="install-dialog" role="dialog" aria-modal="true" aria-labelledby="install-title">
+      <div class="sheet-header">
+        <div>
+          <span class="sheet-eyebrow">INSTALLATION</span>
+          <h2 class="sheet-title" id="install-title">Install ARISE</h2>
+        </div>
+        <button type="button" class="sheet-close" data-close-sheet="installation"
+          aria-label="Close installation dialog">✕</button>
+      </div>
+      <p class="docs-lead">Activate ARISE globally via Dart pub:</p>
+      <div class="cmd-box">
+        <code id="install-cmd">dart pub global activate arise</code>
+        <button type="button" class="cmd-copy" data-copy="dart pub global activate arise">Copy</button>
+      </div>
+      <div class="sheet-footer">
+        <span></span>
+        <a href="https://pub.dev/packages/arise/install" class="sheet-ext-link" target="_blank"
+          rel="noopener noreferrer">
+          View full package instructions on pub.dev ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+
+</html>
