@@ -1,0 +1,729 @@
+{
+  "ok": false,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": false,
+    "errorCount": 1,
+    "warningCount": 5,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "timeline_track_too_dense",
+        "severity": "warning",
+        "message": "This HTML file has 4 timed elements. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "/Users/storm/project/arise/arise/brag-output/composition/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate."
+      },
+      {
+        "code": "font_family_without_font_face",
+        "severity": "error",
+        "message": "Font family used without @font-face declaration: sfmono-regular. These are not in the auto-resolved font list, so the renderer cannot supply them automatically. Text will fall back to a generic font, producing incorrect typography in the video.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "/Users/storm/project/arise/arise/brag-output/composition/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add @font-face { font-family: '...'; src: url('capture/assets/fonts/...woff2'); } for each font family, pointing to the captured .woff2 files, or switch to a Google Fonts family. An OS font such as PingFang SC or Hiragino Sans renders locally from the installed copy, but a cloud render has no copy and refuses it."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<div id=\"scene-1\"> is a timeline element that contains nested <div id=\"s1-eyebrow\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#scene-1",
+        "dataAttributes": {},
+        "sourceFile": "/Users/storm/project/arise/arise/brag-output/composition/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <div id=\"scene-1\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<div id=\"scene-2\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#scene-2",
+        "dataAttributes": {},
+        "sourceFile": "/Users/storm/project/arise/arise/brag-output/composition/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <div id=\"scene-2\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<div id=\"scene-3\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#scene-3",
+        "dataAttributes": {},
+        "sourceFile": "/Users/storm/project/arise/arise/brag-output/composition/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <div id=\"scene-3\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<div id=\"scene-4\"> is a timeline element that contains nested <div id=\"s4-badge\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#scene-4",
+        "dataAttributes": {},
+        "sourceFile": "/Users/storm/project/arise/arise/brag-output/composition/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <div id=\"scene-4\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      }
+    ],
+    "filesScanned": 1
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 10,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-hook\" is 0.11s but its slot (data-duration) is 1.00s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "20",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-key-1\" is 0.25s but its slot (data-duration) is 0.40s — the slot is shortened to the media length when rendered. Set data-duration to ~0.25s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "20",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-key-2\" is 0.25s but its slot (data-duration) is 0.40s — the slot is shortened to the media length when rendered. Set data-duration to ~0.25s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "20",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-key-3\" is 0.25s but its slot (data-duration) is 0.40s — the slot is shortened to the media length when rendered. Set data-duration to ~0.25s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "20",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-key-4\" is 0.25s but its slot (data-duration) is 0.40s — the slot is shortened to the media length when rendered. Set data-duration to ~0.25s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "20",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-cards-1\" is 0.11s but its slot (data-duration) is 1.00s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "20",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-cards-2\" is 0.11s but its slot (data-duration) is 1.00s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "20",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-gen\" is 0.11s but its slot (data-duration) is 1.00s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "20",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-doc\" is 0.11s but its slot (data-duration) is 1.00s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "20",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-outro\" is 1.48s but its slot (data-duration) is 2.50s — the slot is shortened to the media length when rendered. Set data-duration to ~1.48s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "20",
+          "data-width": "1920",
+          "data-height": "1080"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      }
+    ]
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "duration": 20,
+    "samples": [
+      1.111,
+      3.333,
+      5.556,
+      7.778,
+      10,
+      12.222,
+      14.444,
+      16.667,
+      18.889
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 0,
+    "truncated": false,
+    "faceCheck": {
+      "ran": true,
+      "candidates": 0,
+      "faces": 0
+    }
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      1.111,
+      5.556,
+      10,
+      14.444,
+      18.889
+    ],
+    "checked": 44,
+    "passed": 44
+  },
+  "craft": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 2,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "first_frame_empty",
+        "severity": "warning",
+        "message": "Frame 0 shows only the background, and the first frame is the thumbnail on social players: have the title or key image already on screen at 0 s instead of entering from nothing; see references/review.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 35 text elements stay under it for 0.5 s or more, the smallest \"zsh — ~/workspace\" at 18 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "zsh — ~/workspace",
+        "selector": "#s2-terminal > div:nth-of-type(1) > span:nth-of-type(4)",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 229,
+          "y": 374.16,
+          "width": 183.61,
+          "height": 23
+        },
+        "time": 3.25,
+        "times": [
+          0.25,
+          3,
+          3.25,
+          3.25,
+          3.25,
+          3.25,
+          3.25,
+          3.25,
+          3.25,
+          3.25,
+          4.625,
+          4.625,
+          5.125,
+          5.125,
+          5.625,
+          5.625,
+          6.125,
+          6.125,
+          9,
+          9.25,
+          9.25,
+          9.25,
+          9.25,
+          9.625,
+          10.125,
+          10.625,
+          10.625,
+          10.625,
+          11.125,
+          11.625,
+          11.625,
+          11.625,
+          12.125,
+          15.75,
+          17.25
+        ],
+        "fontPx": 18,
+        "floorPx": 28,
+        "seconds": 5.75,
+        "elements": [
+          {
+            "selector": "#s2-terminal > div:nth-of-type(1) > span:nth-of-type(4)",
+            "text": "zsh — ~/workspace",
+            "fontPx": 18,
+            "time": 3.25,
+            "seconds": 5.75
+          },
+          {
+            "selector": "#s3-left > div:nth-of-type(1) > span:nth-of-type(4)",
+            "text": "arise gen feature auth -t full",
+            "fontPx": 18,
+            "time": 9.25,
+            "seconds": 6.25
+          },
+          {
+            "selector": "#s1-eyebrow",
+            "text": "FLUTTER PROJECT BOOTSTRAPPING",
+            "fontPx": 20,
+            "time": 0.25,
+            "seconds": 2.75
+          },
+          {
+            "selector": "#scene-2 > div:nth-of-type(1)",
+            "text": "ARISE v1.2.0 • PROJECT BOOTSTRAP",
+            "fontPx": 20,
+            "time": 3,
+            "seconds": 6
+          },
+          {
+            "selector": "#scene-3 > div:nth-of-type(1)",
+            "text": "FEATURE SCAFFOLDING & TOOLING",
+            "fontPx": 20,
+            "time": 9,
+            "seconds": 6.5
+          },
+          {
+            "selector": "#s2-card-1 > div:nth-of-type(2)",
+            "text": "Wired with ProviderScope & configureDependencies()",
+            "fontPx": 22,
+            "time": 4.625,
+            "seconds": 4.375
+          },
+          {
+            "selector": "#s2-card-2 > div:nth-of-type(2)",
+            "text": "Configured with MaterialApp.router(routerConfig: appRouter)",
+            "fontPx": 22,
+            "time": 5.125,
+            "seconds": 3.875
+          },
+          {
+            "selector": "#s2-card-3 > div:nth-of-type(2)",
+            "text": "dio_client.dart • app_router.dart • injection.dart",
+            "fontPx": 22,
+            "time": 5.625,
+            "seconds": 3.375
+          },
+          {
+            "selector": "#s2-card-4 > div:nth-of-type(2)",
+            "text": "Persists architecture, state, routing, DI, storage & lint",
+            "fontPx": 22,
+            "time": 6.125,
+            "seconds": 2.875
+          },
+          {
+            "selector": "#t-1",
+            "text": "lib/features/auth/",
+            "fontPx": 22,
+            "time": 9.625,
+            "seconds": 5.875
+          },
+          {
+            "selector": "#t-2",
+            "text": "├── data/models/auth_model.dart",
+            "fontPx": 22,
+            "time": 10.125,
+            "seconds": 5.375
+          },
+          {
+            "selector": "#t-3",
+            "text": "├── domain/usecases/get_auth.dart",
+            "fontPx": 22,
+            "time": 10.625,
+            "seconds": 4.875
+          },
+          {
+            "selector": "#s3-add > div:nth-of-type(2)",
+            "text": "Installs from pub.dev into pubspec.yaml while keeping .arise.yaml untouched.",
+            "fontPx": 22,
+            "time": 10.625,
+            "seconds": 4.875
+          },
+          {
+            "selector": "#t-4",
+            "text": "├── presentation/pages/auth_page.dart",
+            "fontPx": 22,
+            "time": 11.125,
+            "seconds": 4.375
+          },
+          {
+            "selector": "#t-5",
+            "text": "├── presentation/providers/auth_provider.dart",
+            "fontPx": 22,
+            "time": 11.625,
+            "seconds": 3.875
+          },
+          {
+            "selector": "#s3-doctor > div:nth-of-type(2)",
+            "text": "[✓] Dart SDK 3.9.2 [✓] Flutter 3.35.7 [✓] 4 feature architectures loaded",
+            "fontPx": 22,
+            "time": 11.625,
+            "seconds": 3.875
+          },
+          {
+            "selector": "#t-6",
+            "text": "└── test/features/auth/auth_test.dart",
+            "fontPx": 22,
+            "time": 12.125,
+            "seconds": 3.375
+          },
+          {
+            "selector": "#s2-card-1 > div:nth-of-type(1)",
+            "text": "lib/main.dart",
+            "fontPx": 24,
+            "time": 4.625,
+            "seconds": 4.375
+          },
+          {
+            "selector": "#s2-card-2 > div:nth-of-type(1)",
+            "text": "lib/app.dart",
+            "fontPx": 24,
+            "time": 5.125,
+            "seconds": 3.875
+          },
+          {
+            "selector": "#s2-card-3 > div:nth-of-type(1)",
+            "text": "lib/core/",
+            "fontPx": 24,
+            "time": 5.625,
+            "seconds": 3.375
+          },
+          {
+            "selector": "#s2-card-4 > div:nth-of-type(1)",
+            "text": ".arise.yaml",
+            "fontPx": 24,
+            "time": 6.125,
+            "seconds": 2.875
+          },
+          {
+            "selector": "#s3-add > div:nth-of-type(1)",
+            "text": "$ arise add equatable",
+            "fontPx": 24,
+            "time": 10.625,
+            "seconds": 4.875
+          },
+          {
+            "selector": "#s3-doctor > div:nth-of-type(1)",
+            "text": "$ arise doctor",
+            "fontPx": 24,
+            "time": 11.625,
+            "seconds": 3.875
+          },
+          {
+            "selector": "#s4-footer",
+            "text": "114 tests passing • Zero boilerplate",
+            "fontPx": 24,
+            "time": 17.25,
+            "seconds": 2.75
+          },
+          {
+            "selector": "#s2-terminal > div:nth-of-type(2)",
+            "text": "arise create my_app clean riverpod go_router dio get_it",
+            "fontPx": 26,
+            "time": 3.25,
+            "seconds": 5.75
+          },
+          {
+            "selector": "#s2-terminal > div:nth-of-type(2) > span:nth-of-type(1)",
+            "text": "$",
+            "fontPx": 26,
+            "time": 3.25,
+            "seconds": 5.75
+          },
+          {
+            "selector": "#s2-terminal > div:nth-of-type(2) > span:nth-of-type(2)",
+            "text": "--arch",
+            "fontPx": 26,
+            "time": 3.25,
+            "seconds": 5.75
+          },
+          {
+            "selector": "#s2-terminal > div:nth-of-type(2) > span:nth-of-type(3)",
+            "text": "--state",
+            "fontPx": 26,
+            "time": 3.25,
+            "seconds": 5.75
+          },
+          {
+            "selector": "#s2-terminal > div:nth-of-type(2) > span:nth-of-type(4)",
+            "text": "--route",
+            "fontPx": 26,
+            "time": 3.25,
+            "seconds": 5.75
+          },
+          {
+            "selector": "#s2-terminal > div:nth-of-type(2) > span:nth-of-type(5)",
+            "text": "--network",
+            "fontPx": 26,
+            "time": 3.25,
+            "seconds": 5.75
+          },
+          {
+            "selector": "#s2-terminal > div:nth-of-type(2) > span:nth-of-type(6)",
+            "text": "--di",
+            "fontPx": 26,
+            "time": 3.25,
+            "seconds": 5.75
+          },
+          {
+            "selector": "div.terminal-body > div:nth-of-type(1)",
+            "text": "arise gen feature auth full",
+            "fontPx": 26,
+            "time": 9.25,
+            "seconds": 6.25
+          },
+          {
+            "selector": "div.terminal-body > div:nth-of-type(1) > span:nth-of-type(1)",
+            "text": "$",
+            "fontPx": 26,
+            "time": 9.25,
+            "seconds": 6.25
+          },
+          {
+            "selector": "div.terminal-body > div:nth-of-type(1) > span:nth-of-type(2)",
+            "text": "-t",
+            "fontPx": 26,
+            "time": 9.25,
+            "seconds": 6.25
+          },
+          {
+            "selector": "#s4-badge",
+            "text": "v1.2.0",
+            "fontPx": 26,
+            "time": 15.75,
+            "seconds": 4.25
+          }
+        ]
+      }
+    ],
+    "enabled": true,
+    "step": 0.125,
+    "samples": 160
+  },
+  "audio": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  }
+}

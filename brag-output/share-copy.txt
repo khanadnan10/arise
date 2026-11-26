@@ -1,0 +1,3 @@
+Shipped Arise v1.2.0 for Flutter: wired main.dart/app.dart, DI & storage modules, standard/full state-aware feature scaffolds (`arise gen`), plus `arise add`, `info`, and `doctor`.
+
+dart pub global activate arise

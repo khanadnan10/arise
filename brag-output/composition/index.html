@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b1120;
+        --surface: #111827;
+        --surface-2: #0f172a;
+        --border: #1e293b;
+        --ink: #f8fafc;
+        --muted: #cbd5e1;
+        --accent: #38bdf8;
+        --emerald: #34d399;
+        --font-sans: "Inter", sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--font-sans);
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        background: radial-gradient(circle at 50% 20%, #162447 0%, #0b1120 70%);
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        padding: 88px 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        align-self: flex-start;
+        padding: 10px 20px;
+        border-radius: 999px;
+        background: #0f172a;
+        border: 1px solid #334155;
+        color: var(--accent);
+        font-family: var(--font-mono);
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        margin-bottom: 28px;
+      }
+
+      .hook-line {
+        font-size: 74px;
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: -0.03em;
+      }
+
+      .hook-accent {
+        color: var(--accent);
+        margin-top: 12px;
+      }
+
+      .terminal {
+        background: var(--surface-2);
+        border: 1px solid #334155;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      }
+
+      .terminal-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 24px;
+        background: #1e293b;
+      }
+
+      .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+      }
+
+      .dot-red {
+        background: #f87171;
+      }
+      .dot-amber {
+        background: #fbbf24;
+      }
+      .dot-green {
+        background: #34d399;
+      }
+
+      .terminal-title {
+        margin-left: 12px;
+        font-family: var(--font-mono);
+        font-size: 18px;
+        color: var(--muted);
+      }
+
+      .terminal-body {
+        padding: 28px 32px;
+        font-family: var(--font-mono);
+        font-size: 26px;
+        line-height: 1.5;
+        color: var(--ink);
+      }
+
+      .prompt {
+        color: var(--emerald);
+        font-weight: 700;
+        margin-right: 12px;
+      }
+
+      .flag {
+        color: var(--accent);
+      }
+
+      .grid-2x2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 32px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid #334155;
+        border-radius: 16px;
+        padding: 24px 28px;
+      }
+
+      .card-title {
+        font-family: var(--font-mono);
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+
+      .card-desc {
+        font-size: 22px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 32px;
+        align-items: stretch;
+      }
+
+      .tree-list {
+        list-style: none;
+        margin-top: 16px;
+        font-family: var(--font-mono);
+        font-size: 22px;
+        line-height: 1.75;
+      }
+
+      .tree-item {
+        color: var(--ink);
+      }
+
+      .tree-muted {
+        color: var(--muted);
+      }
+
+      .tree-green {
+        color: var(--emerald);
+      }
+
+      .stack-col {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .outro {
+        align-items: center;
+        text-align: center;
+      }
+
+      .version-pill {
+        padding: 10px 28px;
+        border-radius: 999px;
+        background: var(--accent);
+        color: #0b1120;
+        font-family: var(--font-mono);
+        font-size: 26px;
+        font-weight: 800;
+        margin-bottom: 24px;
+      }
+
+      .hero-title {
+        font-size: 128px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+
+      .hero-sub {
+        font-size: 38px;
+        color: var(--muted);
+        margin-top: 18px;
+        margin-bottom: 40px;
+      }
+
+      .install-pill {
+        padding: 20px 40px;
+        border-radius: 16px;
+        background: var(--surface-2);
+        border: 2px solid var(--accent);
+        font-family: var(--font-mono);
+        font-size: 30px;
+        color: var(--ink);
+      }
+
+      .hero-footer {
+        margin-top: 32px;
+        font-family: var(--font-mono);
+        font-size: 24px;
+        color: var(--emerald);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="20"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- Audio -->
+      <audio
+        id="bg-music"
+        data-start="0"
+        data-duration="20"
+        data-track-index="10"
+        data-volume="0.30"
+        src="assets/music/happy-beats-business-moves-vol-1-by-ende-dot-app.mp3"
+      ></audio>
+      <audio id="sfx-hook" data-start="0.65" data-duration="1" data-track-index="11" data-volume="0.70" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-key-1" data-start="3.2" data-duration="0.4" data-track-index="12" data-volume="0.55" src="assets/sfx/keyboard/keypress-001.wav"></audio>
+      <audio id="sfx-key-2" data-start="3.4" data-duration="0.4" data-track-index="13" data-volume="0.55" src="assets/sfx/keyboard/keypress-002.wav"></audio>
+      <audio id="sfx-key-3" data-start="3.6" data-duration="0.4" data-track-index="14" data-volume="0.55" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+      <audio id="sfx-key-4" data-start="3.8" data-duration="0.4" data-track-index="15" data-volume="0.55" src="assets/sfx/keyboard/keypress-004.wav"></audio>
+      <audio id="sfx-cards-1" data-start="4.5" data-duration="1" data-track-index="16" data-volume="0.65" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-cards-2" data-start="5.5" data-duration="1" data-track-index="17" data-volume="0.65" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-gen" data-start="9.4" data-duration="1" data-track-index="18" data-volume="0.65" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-doc" data-start="11.5" data-duration="1" data-track-index="19" data-volume="0.65" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-outro" data-start="15.55" data-duration="2.5" data-track-index="20" data-volume="0.75" src="assets/sfx/impact/impactBell_heavy_000.ogg"></audio>
+
+      <!-- Scene 1: Hook (0s - 3s) -->
+      <div id="scene-1" class="scene clip" data-start="0" data-duration="3.0" data-track-index="0">
+        <div id="s1-eyebrow" class="eyebrow">FLUTTER PROJECT BOOTSTRAPPING</div>
+        <h1 id="s1-line-1" class="hook-line">Starting a Flutter project is easy.</h1>
+        <h2 id="s1-line-2" class="hook-line hook-accent">
+          Setting up a consistent project structure isn't.
+        </h2>
+      </div>
+
+      <!-- Scene 2: arise create Wired Stack (3s - 9s) -->
+      <div id="scene-2" class="scene clip" data-start="3.0" data-duration="6.0" data-track-index="0">
+        <div class="eyebrow">ARISE v1.2.0 • PROJECT BOOTSTRAP</div>
+        <div id="s2-terminal" class="terminal">
+          <div class="terminal-bar">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-amber"></span>
+            <span class="dot dot-green"></span>
+            <span class="terminal-title">zsh — ~/workspace</span>
+          </div>
+          <div class="terminal-body">
+            <span class="prompt">$</span>arise create my_app
+            <span class="flag">--arch</span> clean
+            <span class="flag">--state</span> riverpod
+            <span class="flag">--route</span> go_router
+            <span class="flag">--network</span> dio
+            <span class="flag">--di</span> get_it
+          </div>
+        </div>
+        <div class="grid-2x2">
+          <div id="s2-card-1" class="card">
+            <div class="card-title">lib/main.dart</div>
+            <div class="card-desc">Wired with ProviderScope &amp; configureDependencies()</div>
+          </div>
+          <div id="s2-card-2" class="card">
+            <div class="card-title">lib/app.dart</div>
+            <div class="card-desc">Configured with MaterialApp.router(routerConfig: appRouter)</div>
+          </div>
+          <div id="s2-card-3" class="card">
+            <div class="card-title">lib/core/</div>
+            <div class="card-desc">dio_client.dart • app_router.dart • injection.dart</div>
+          </div>
+          <div id="s2-card-4" class="card">
+            <div class="card-title">.arise.yaml</div>
+            <div class="card-desc">Persists architecture, state, routing, DI, storage &amp; lint</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 3: arise gen & arise add (9s - 15.5s) -->
+      <div id="scene-3" class="scene clip" data-start="9.0" data-duration="6.5" data-track-index="0">
+        <div class="eyebrow">FEATURE SCAFFOLDING &amp; TOOLING</div>
+        <div class="split">
+          <div id="s3-left" class="terminal">
+            <div class="terminal-bar">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-amber"></span>
+              <span class="dot dot-green"></span>
+              <span class="terminal-title">arise gen feature auth -t full</span>
+            </div>
+            <div class="terminal-body">
+              <div><span class="prompt">$</span>arise gen feature auth <span class="flag">-t</span> full</div>
+              <ul class="tree-list">
+                <li id="t-1" class="tree-item">lib/features/auth/</li>
+                <li id="t-2" class="tree-muted">├── data/models/auth_model.dart</li>
+                <li id="t-3" class="tree-muted">├── domain/usecases/get_auth.dart</li>
+                <li id="t-4" class="tree-muted">├── presentation/pages/auth_page.dart</li>
+                <li id="t-5" class="tree-item">├── presentation/providers/auth_provider.dart</li>
+                <li id="t-6" class="tree-green">└── test/features/auth/auth_test.dart</li>
+              </ul>
+            </div>
+          </div>
+          <div class="stack-col">
+            <div id="s3-add" class="card">
+              <div class="card-title">$ arise add equatable</div>
+              <div class="card-desc">
+                Installs from pub.dev into pubspec.yaml while keeping .arise.yaml untouched.
+              </div>
+            </div>
+            <div id="s3-doctor" class="card">
+              <div class="card-title">$ arise doctor</div>
+              <div class="card-desc">
+                [✓] Dart SDK 3.9.2<br />
+                [✓] Flutter 3.35.7<br />
+                [✓] 4 feature architectures loaded
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 4: Release Outro (15.5s - 20s) -->
+      <div id="scene-4" class="scene outro clip" data-start="15.5" data-duration="4.5" data-track-index="0">
+        <div id="s4-badge" class="version-pill">v1.2.0</div>
+        <h1 id="s4-title" class="hero-title">Arise</h1>
+        <p id="s4-sub" class="hero-sub">Modular Flutter CLI</p>
+        <div id="s4-install" class="install-pill">dart pub global activate arise</div>
+        <div id="s4-footer" class="hero-footer">114 tests passing  •  Zero boilerplate</div>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // Scene 1: Hook (0.0s - 3.0s)
+      tl.fromTo("#s1-eyebrow", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 0.05)
+        .fromTo("#s1-line-1", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.2)
+        .fromTo("#s1-line-2", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.65)
+        .to("#scene-1", { opacity: 0, duration: 0.25, ease: "power2.in" }, 2.75);
+
+      // Scene 2: arise create (3.0s - 9.0s)
+      tl.fromTo("#s2-terminal", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 3.05)
+        .fromTo("#s2-card-1", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 4.52) // beat-grid: 4.53s
+        .fromTo("#s2-card-2", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 5.03) // beat-grid: 5.03s
+        .fromTo("#s2-card-3", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 5.53) // beat-grid: 5.53s
+        .fromTo("#s2-card-4", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 6.03) // beat-grid: 6.03s
+        .to("#scene-2", { opacity: 0, duration: 0.25, ease: "power2.in" }, 8.75);
+
+      // Scene 3: arise gen & arise add (9.0s - 15.5s)
+      tl.fromTo("#s3-left", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, 9.05)
+        .fromTo("#t-1", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 9.52)
+        .fromTo("#t-2", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 10.02)
+        .fromTo("#t-3", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 10.52)
+        .fromTo("#t-4", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 11.02)
+        .fromTo("#t-5", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 11.52)
+        .fromTo("#t-6", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 12.02)
+        .fromTo("#s3-add", { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 10.52)
+        .fromTo("#s3-doctor", { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 11.52)
+        .to("#scene-3", { opacity: 0, duration: 0.25, ease: "power2.in" }, 15.25);
+
+      // Scene 4: Outro (15.5s - 20.0s)
+      tl.fromTo("#s4-badge", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }, 15.55) // beat-locked: 15.52s
+        .fromTo("#s4-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 15.75)
+        .fromTo("#s4-sub", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 16.05)
+        .fromTo("#s4-install", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 16.4)
+        .fromTo("#s4-footer", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 17.02); // beat-locked: 17.02s
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
